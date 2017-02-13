@@ -1,0 +1,40 @@
+<mahapps:MetroWindow x:Class="RTI.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mahapps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:cal="http://www.caliburnproject.org"
+        WindowState="Maximized">
+
+    <!--Displayed next to the Minimize/Maximize/Close buttons-->
+    <mahapps:MetroWindow.RightWindowCommands>
+        <mahapps:WindowCommands>
+            <Button Content="terminal" Command="{Binding Path=TerminalViewCommand}" />
+            <!--Button Content="about" Command="{Binding Path=AboutViewCommand}" /-->
+            <Button Content="about" Command="{Binding Path=AboutCommand}" />
+        </mahapps:WindowCommands>
+    </mahapps:MetroWindow.RightWindowCommands>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Navigation Bar-->
+        <ContentControl Grid.Row="0" cal:View.Model="{Binding NavBarVM}" Visibility="{Binding Path=IsNavBarEnabled, Converter={StaticResource BoolToVisConverter}}" Height="60" />
+
+        <!--Status Bar-->
+        <!--ContentControl Grid.Row="1" cal:View.Model="{Binding StatusBarVM}" Height="40" /-->
+
+        <!--Main Display-->
+        <ContentControl Grid.Row="1" x:Name="ActiveItem" />
+
+        <!--Playback Controls-->
+        <!--ContentControl Grid.Row="2" cal:View.Model="{Binding PlaybackVM}" Height="35" /-->
+    </Grid>
+
+</mahapps:MetroWindow>

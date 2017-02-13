@@ -1,0 +1,228 @@
+﻿<UserControl x:Class="RTI.ViewDataWavesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+			 xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+			 xmlns:helix="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
+			 xmlns:rti="clr-namespace:RTI"
+			 xmlns:cal="http://www.caliburnproject.org"  
+			 xmlns:mahapps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignWidth="1200" d:DesignHeight="825"
+             Background="{StaticResource PulseBackgroundColor}"
+	            Foreground="{StaticResource PulseFontColor}"
+			 >
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+        <Grid Background="Black" Grid.IsSharedSizeScope="True">
+    	
+		    <Grid.ColumnDefinitions>
+			    <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+			    <ColumnDefinition Width="*" />
+		    </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--Text Display-->
+            <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource PulseBackBorder1Color}" >
+                <StackPanel>
+                    <!--Read Matlab file-->
+                    <Border Margin="5" Background="Black" VerticalAlignment="Top">
+                        <StackPanel Orientation="Horizontal">
+                            <!--Results-->
+                            <StackPanel>
+                                <TextBlock Text="Read Matlab File" Margin="5" Foreground="{StaticResource PulseFontHighlightColor}" MaxWidth="300" TextWrapping="Wrap" FontSize="20" FontWeight="Bold"/>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Record Number: " Margin="5" Foreground="White" />
+                                    <TextBlock Text="{Binding WavesRecordNumber}" Foreground="White" Margin="5" />
+                                </StackPanel>
+                                <TextBlock Text="Import Report" Foreground="{StaticResource PulseFontBrightColor}" Margin="5" />
+                                <ScrollViewer MaxWidth="300" MaxHeight="150" HorizontalScrollBarVisibility="Auto">
+                                    <TextBlock Text="{Binding WavesProc}" Foreground="White" Margin="5" FontFamily="Courier New" />
+                                </ScrollViewer>
+                                <StackPanel Orientation="Horizontal">
+                                    <!--Process Data-->
+                                    <Button Command="{Binding ImportMatlabWavesCommand}" HorizontalAlignment="Center" Margin="5" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Width="24" Height="24" Margin="5">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Visual="{StaticResource plot}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <StackPanel>
+                                                <TextBlock Text="Process and Display" Margin="2" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Waves Matlab data" Margin="2" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button>
+                                    
+                                    <!--Clear Plots-->
+                                    <Button Command="{Binding Path=ClearPlotsCommand}" Margin="5" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Width="24" Height="24" Margin="5">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Visual="{StaticResource sweep}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <TextBlock Text="Clear Plots" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <!--Options-->
+                            <Border Background="{StaticResource PulseBackBorder2Color}" CornerRadius="2" Margin="5">
+                                <StackPanel>
+                                    <TextBlock Text="Processing Options" Foreground="{StaticResource PulseFontBrightColor}" Margin="5" />
+                                    
+                                    <!--Min Freq-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Min Freq (Hz):                 " Margin="5,5,5,2" Foreground="White" />
+                                        <extToolkit:DecimalUpDown Value="{Binding Path=WavesMinFreq}" Minimum="0" Margin="5,2" Background="White" />
+                                    </StackPanel>
+
+                                    <!--Min Height-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Min Height(m):               " Margin="5,2" Foreground="White" />
+                                        <extToolkit:DecimalUpDown Value="{Binding Path=WavesMinHeight}" Minimum="0" Margin="5,2" Background="White" />
+                                    </StackPanel>
+
+                                    <!--Wave Bands-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Num Wave Bands:          " Margin="5,2" Foreground="White" />
+                                        <extToolkit:DecimalUpDown Value="{Binding Path=NumWavesBands}" Minimum="0" Margin="5,2" Background="White" />
+                                    </StackPanel>
+
+                                    <!--Max Scale Factor-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Max Scale Factor:            " Margin="5,2" Foreground="White" />
+                                        <extToolkit:DecimalUpDown Value="{Binding Path=WavesMaxScaleFactor}" Minimum="0" Margin="5,2" Background="White" />
+                                    </StackPanel>
+
+                                    <!--Use Beam or Pressure-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Use Beam Height Source:" Margin="5,2" Foreground="White" />
+                                        <CheckBox IsChecked="{Binding IsHeightSensorBeam}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Center" />
+                                        <StackPanel.ToolTip>
+                                            <TextBlock Text="Use Beam or the Pressure sensor for the height source." />
+                                        </StackPanel.ToolTip>
+                                    </StackPanel>
+
+                                    <!--Wave Bursts-->
+                                    <Border Background="{StaticResource PulseBackBorder2Color}">
+                                        <StackPanel>
+                                            <TextBlock Text="Wave Bursts" Foreground="{StaticResource PulseFontHighlightColor}" Margin="5,0" />
+                                            <ScrollViewer Height="120" MaxWidth="400" Margin="5" HorizontalScrollBarVisibility="Auto">
+                                                <ListBox ItemsSource="{Binding Path=WavesBurstList}" SelectedItem="{Binding SelectedBurst}" />
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+
+
+                                </StackPanel>
+                            </Border>
+                            
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+            
+
+            
+            <Border Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" Margin="5" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="2">
+                <StackPanel Margin="5">
+
+                    <!--Wave Bands-->
+                    <TextBlock Text="{Binding Path=WaveBands}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+
+                    <!--Hs-->
+                    <TextBlock Text="{Binding Path=Hs}" Foreground="White" FontFamily="Courier New" Margin="5,0" />
+
+                    <!--Peak Period-->
+                    <TextBlock Text="{Binding Path=PeakPeriod}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+
+                    <!--Mean Period-->
+                    <TextBlock Text="{Binding Path=MeanPeriod}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+
+                    <!--Peak Direction-->
+                    <TextBlock Text="{Binding Path=PeakDir}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+                    
+                    <!--Peak Spread-->
+                    <TextBlock Text="{Binding Path=PeakSpread}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+
+                    <!--Bin Velocity-->
+                    <TextBlock Text="{Binding Path=BinVelocity}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+
+                    <!--Bin Direction-->
+                    <TextBlock Text="{Binding Path=BinDirection}" Foreground="White" FontFamily="Courier New" Margin="5,0"  />
+                    
+                </StackPanel>
+            </Border>
+            
+            
+            <!--East Velocity Plot-->
+            <Grid Grid.Row="1" Grid.Column="0" Background="Black" MinHeight="250" MinWidth="400"  Margin="10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding EastVelocityPlot}" />
+            </Grid>
+
+            <!--North Velocity Plot-->
+            <Grid Grid.Row="2" Grid.Column="0" Background="Black" MinHeight="250" MinWidth="400"  Margin="10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding NorthVelocityPlot}" />
+            </Grid>
+
+            <!--Pressure Time Series-->
+            <Grid Grid.Row="3" Grid.Column="0" Background="Black" MinHeight="250" MinWidth="400"  Margin="10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding PressurePlot}" />
+            </Grid>
+
+            <!--FFT Plot-->
+            <Grid Grid.Row="1" Grid.Column="1" Background="Black" MinHeight="250" MinWidth="400"  Margin="10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding FftPlot}" />
+            </Grid>
+
+            <!--Frequency Plot-->
+            <Grid Grid.Row="2" Grid.Column="1" Background="Black" MinHeight="250" MinWidth="400"  Margin="10, 10, 75, 10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding FrequencyPlot}" />
+            </Grid>
+
+            <!--Period Plot-->
+            <Grid Grid.Row="3" Grid.Column="1" Background="Black" MinHeight="250" MinWidth="400"  Margin="10, 10, 75, 10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding PeriodPlot}" />
+            </Grid>
+
+            <!--Spectrum Plot-->
+            <Grid Grid.Row="1" Grid.Column="2" Background="Black" MinHeight="250" MinWidth="400"  Margin="10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding SpectrumPlot}" />
+            </Grid>
+
+            <StackPanel Grid.Row="0" Grid.Column="1">
+                <!--Velocity Set Plot-->
+                <Grid Grid.Row="0" Grid.Column="1" Background="Black" MinHeight="250" MinWidth="400"  Margin="30,10,60,10">
+                    <ContentControl Grid.Row="0" cal:View.Model="{Binding VelSetPlot}" />
+                </Grid>
+
+                <!--Sensor Set Plot-->
+                <Grid Grid.Row="0" Grid.Column="3" Background="Black" MinHeight="250" MinWidth="400"  Margin="30,10,60,10">
+                    <ContentControl Grid.Row="0" cal:View.Model="{Binding SensorSetPlot}" />
+                </Grid>
+
+            </StackPanel>
+
+            <!--Wave Set Plot-->
+            <Grid Grid.Row="0" Grid.Column="2" Background="Black" MinHeight="250" MinWidth="400"  Margin="30,10,30,10">
+                <ContentControl Grid.Row="0" cal:View.Model="{Binding WaveSetPlot}" />
+            </Grid>
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

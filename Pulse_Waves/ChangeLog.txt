@@ -1,0 +1,60 @@
+﻿Pulse_Waves Changelog
+
+Pulse_Waves-1.1.7
+ - Changed file import to handle large files.
+
+Pulse_Waves-1.1.6
+ - In WavesSubsystemConfigurationViewModel, fixed bug with prediction models for subsystem being out of sync with main prediciton model.
+ - In WavesSubsystemConfigurationViewModel, fixed bug where CWPP was 1 but CWPTBP had a value.
+
+Pulse_Waves-1.1.5
+ - Fixed the font color in text boxes.
+ - Added CSAVE to SetCETFPtoAdcp().
+
+Pulse_Waves-1.1.4
+ - Fixed bug in prediction model of waves velocity.
+ - Fixed DateTimePicker.
+ - Removed auto setting true for interleaved.
+
+Pulse_Waves-1.1.3
+ - Updated the prediction model.
+ - Added Range Tracking.
+
+Pulse_Waves-1.1.2
+ - Made the prediction model scroll vertical instead of horizontal.
+
+Pulse_Waves-1.1.1
+ - In RecoverDataViewModel, select ENS and BIN as default options for playback files.
+ - Make it look for the Wavector exe text file in Pulse_Waves folder and not Pulse folder.
+
+Pulse_Waves-1.1.0
+ - Updated Wavector icon and label.
+ - Fixed installer add Pulse.db.
+
+Pulse_Wave-1.0.0
+ - In WavesSubsystemConfigurationViewModel, added UpdateCEI() to update all the CEI in each VM.
+ - In WavesSetupViewModel, added UpdateCEI() to update all the CEI commands for each VM.
+ - In RtiWavesEncoder, fixed bug if the burst is only a 4beam or vertical, no interleave, then set the correct sample time in WavesCreateMatFile().
+ - Fixed scrolling in Configure page terminal window.
+ - In WavesSubsystemConfigurationViewModel, added CBI_Interleaved.
+
+Pulse_Wave-0.0.3
+ - In RtiWavesEncoder, cleanup and recode the matlab encoding.
+ - In RtiWavesEncoder, fixed bug with encoding to matlab with the columns not be written correctly.
+ - In RecoverDataView, fix the layout of the recovery page.
+
+Pulse_Wave-0.0.2
+ - Updated version number.
+ - In RecoverDataViewModel, made the bin selections capable of being disabled to be backwards compatible.
+ - In RecoverDataOptions, changed Selected bins to a string to know if disabled. 
+ - In RtiWavesEncoder, check for missing ensembles.
+ - Add WaVector loading.
+ - In WavesSetupViewModel, added button flags to set the color of the button when pressed.
+
+Pulse_Waves-0.0.1
+ - Initial coding.
+ - View can now handle multiple wave records.
+ - Adding default options.
+ - Saving options in RecoverDataViewModel, ViewDataWavesViewModel and last page viewed ShellViewModel.
+ - Fixed bug clearing the configurations.
+ - Added Compass cal.

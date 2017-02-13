@@ -1,0 +1,9 @@
+.svn*
+obj/
+bin/
+*.suo
+*.user
+Log/
+log/
+*.db
+packages/

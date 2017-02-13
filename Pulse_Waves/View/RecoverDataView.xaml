@@ -1,0 +1,476 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="RTI.RecoverDataView"
+    xmlns:mahapps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	x:Name="Page"
+	FlowDirection="LeftToRight"
+	xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+	Background="{StaticResource PulseBackgroundColor}"
+	Foreground="{StaticResource PulseFontColor}">
+	
+	<ScrollViewer>
+	<Grid Grid.Row="5" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True" HorizontalAlignment="Left">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+		
+
+
+        <Border Grid.Row="1" Background="{StaticResource PulseBackBorder1Color}" CornerRadius="5" Margin="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="5">
+                        <Border Grid.Row="0" Grid.ColumnSpan="5" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5">
+                            <TextBlock Text="Waves Data Recovery Options" Foreground="#FFC5CFD1" HorizontalAlignment="Left" Margin="5" />
+                        </Border>
+                    </Grid>
+                    
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                    <StackPanel Grid.Column="0">
+                        
+                        
+                        <!--Selected Bins-->
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Selected Bin 1" VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                <ComboBox ItemsSource="{Binding BinList}" SelectedItem="{Binding Bin1Selection}" Margin="5" Foreground="{StaticResource PulseFontColor}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Selected Bin 2" VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                <ComboBox ItemsSource="{Binding BinList}" SelectedItem="{Binding Bin2Selection}" Margin="5"  Foreground="{StaticResource PulseFontColor}"  />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Selected Bin 3" VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                <ComboBox ItemsSource="{Binding BinList}" SelectedItem="{Binding Bin3Selection}" Margin="5"  Foreground="{StaticResource PulseFontColor}"  />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <!--Correlation Threshold-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Correlation Threshold:   " VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=CorrelationThreshold}" Minimum="0" Maximum="1" Increment="0.1" Margin="5" Background="White" />
+                            </StackPanel>
+
+                            <!--Height Source-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Height Source:             " VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                <ComboBox SelectedValue="{Binding Path=BeamHeightSource}" ItemsSource="{Binding Path=HeightSourceList}" Margin="5"  Foreground="{StaticResource PulseFontColor}"  />
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <!--Pressure Sensor Height-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Pressure Sensor Height: " VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=PressureSensorHeight}" Increment="1" Margin="5" Background="White" />
+                            </StackPanel>
+
+                            <!--Pressure Offset-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Pressure Offset (m):       " VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=PressureOffset}" Minimum="0" Margin="5" Background="White" />
+                            </StackPanel>
+
+
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <!--Latitude-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Latitude:                         " VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=Latitude}" Increment="1" Margin="5" MinWidth="80" Background="White" />
+                            </StackPanel>
+
+                            <!--Longitude-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Longitude:         " VerticalAlignment="Center" Foreground="White" Margin="5" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=Longitude}" Increment="1" Margin="5" MinWidth="80" Background="White" />
+                            </StackPanel>
+
+                        </StackPanel>
+
+                            <StackPanel>
+                                <!--Download Directory-->
+                                <TextBlock Grid.Column="0" Grid.Row="0" Text="Download Directory:" Margin="5" HorizontalAlignment="Left" Foreground="White" />
+                                <TextBox Grid.Column="1" Grid.Row="0" MinWidth="200" Text="{Binding Path=DownloadDirectory}" Margin="5" Foreground="{StaticResource PulseFontColor}" />
+                            </StackPanel>
+
+                    </StackPanel>
+
+                        <Border Grid.Column="1" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
+                            
+                            <!--Waves Binary Burst File-->
+                            <Button Command="{Binding ImportBinaryWavesCommand}" Style="{StaticResource ButtonStyle}"   Width="60" Height="60" Margin="40" HorizontalAlignment="Left" Foreground="#FFC5CFC0" BorderBrush="#FFD9D3CE" >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Grid.Row="0" Source="../Images/adcp.png" />
+                                    <Viewbox Grid.Row="1">
+                                        <StackPanel>
+                                            <TextBlock Text="Import" HorizontalAlignment="Center" />
+                                            <TextBlock Text="Waves Burst" HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Viewbox>
+                                </Grid>
+                            </Button>
+                        </Border>
+
+
+                        <!-- Waves Import Data-->
+                        <Border Grid.Column="2" Margin="5" Background="Black">
+                            <StackPanel>
+                                <TextBlock Text="Recover Waves Data" Margin="5" Foreground="{StaticResource PulseFontHighlightColor}" MaxWidth="300" TextWrapping="Wrap" FontSize="20" FontWeight="Bold"/>
+
+                                <!--Import Results-->
+                                <TextBlock Text="Import Report" Foreground="{StaticResource PulseFontBrightColor}" Margin="5,20,5,5" />
+                                <ScrollViewer MaxHeight="300" HorizontalAlignment="Left">
+                                    <TextBox Text="{Binding WavesRecover, Mode=OneWay}" Foreground="White" Margin="5" BorderBrush="Transparent"  MaxWidth="300" TextWrapping="Wrap" />
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Download Data Button -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <!-- Populate Button -->
+                <Button Command="{Binding Path=PopulateDownloadListCommand}" Style="{StaticResource ButtonStyle}"   Width="60" Height="60" Margin="5" Foreground="#FFC5CFC0" BorderBrush="#FFD9D3CE">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="../Images/calibration.png" />
+                        <Viewbox Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="Populate" HorizontalAlignment="Center" />
+                                <TextBlock Text="List" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Viewbox>
+                    </Grid>
+                </Button>
+
+                <!-- Download Data Button -->
+                <Button Command="{Binding Path=DownloadDataCommand}" Style="{StaticResource ButtonStyle}"   Width="60" Height="60" Margin="5" Foreground="#FFC5CFC0" BorderBrush="#FFD9D3CE">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="../Images/import.png" />
+                        <Viewbox Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="Download" HorizontalAlignment="Center" />
+                                <TextBlock Text="Data" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Viewbox>
+                    </Grid>
+                </Button>
+
+                <!-- Format Button -->
+                <Button Command="{Binding Path=FormatSdCardCommand}" Style="{StaticResource ButtonStyle}"   Width="60" Height="60" Margin="5" Foreground="#FFC5CFC0" BorderBrush="#FFD9D3CE">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="../Images/format.png" />
+                        <Viewbox Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="Format" HorizontalAlignment="Center" />
+                                <TextBlock Text="SD Card" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Viewbox>
+                    </Grid>
+                </Button>
+
+            </StackPanel>
+
+            <!--Download Progress-->
+		<Border Grid.Row="3" Background="{StaticResource PulseBackBorder1Color}" CornerRadius="5" Margin="5">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+		
+				<Grid Grid.Row="0" Margin="5">
+					<Border Grid.Row="0" Grid.ColumnSpan="5" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5">
+						<TextBlock Text="Download Progress" Foreground="#FFC5CFD1" HorizontalAlignment="Left" Margin="5" />
+					</Border>
+				</Grid>
+				
+				<Grid Grid.Row="1" Margin="5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" SharedSizeGroup="DescColumn" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					
+					<Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" />
+					
+					<!--Download Progress-->
+					<TextBlock Grid.Column="0" Grid.Row="0" Text="Download Progress:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+					<ProgressBar Grid.Column="1" Grid.Row="0" MinWidth="200" Margin="5" Minimum="0" Maximum="{Binding Path=DownloadListSize}" Value="{Binding Path=DownloadListProgress}" />
+					
+					<!--File Progress-->
+					<TextBlock Grid.Column="0" Grid.Row="1" Text="File Progress:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+					<ProgressBar Grid.Column="1" Grid.Row="1" MinWidth="200" Margin="5" Minimum="0" Maximum="{Binding Path=DownloadFileSize}" Value="{Binding Path=DownloadFileProgress}" />
+					<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Path=DownloadFileProgressPretty}" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+					
+					<Border Grid.Column="0" Grid.Row="2" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="0,5,0,0">
+						<StackPanel>
+							<TextBlock Text="{Binding Path=DownloadFileName}" Margin="5" Foreground="{StaticResource PulseFontColor}" />
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Text="{Binding Path=DownloadListProgress}" Foreground="{StaticResource PulseFontColor}" />
+								<TextBlock Text=" / " Foreground="{StaticResource PulseFontColor}" />
+								<TextBlock Text="{Binding Path=DownloadListSize}" Foreground="{StaticResource PulseFontColor}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Text="Download Fails: " Foreground="{StaticResource PulseFontColor}" />
+								<TextBlock Text="{Binding Path=DownloadFails}" Foreground="{StaticResource PulseFontColor}" />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+					
+					<!-- Cancel Button -->
+					<Button Grid.Column="1" Grid.Row="2" Command="{Binding Path=CancelDownloadCommand}" Style="{StaticResource ButtonStyle}"   Width="60" Height="60" Margin="5" Foreground="#FFC5CFC0" BorderBrush="#FFD9D3CE" HorizontalAlignment="Right">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
+							<Image Grid.Row="0" Source="../Images/calibration.png" />
+							<Viewbox Grid.Row="1">
+								<StackPanel>
+									<TextBlock Text="Cancel" HorizontalAlignment="Center" />
+									<TextBlock Text="Download" HorizontalAlignment="Center" />
+								</StackPanel>
+							</Viewbox>
+						</Grid>
+					</Button>
+					
+				</Grid>
+
+                    <!--Progress Ring-->
+                    <Viewbox Grid.Row="1" Height="120" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" >
+                        <mahapps:ProgressRing IsActive="{Binding IsLoading}" Foreground="Red" Height="200" Width="200" />
+                    </Viewbox>
+                </Grid>
+		</Border>
+		
+		<!--Download Settings-->
+		<Border Grid.Row="4" Background="{StaticResource PulseBackBorder1Color}" CornerRadius="5" Margin="5">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+		
+				<Grid Grid.Row="0" Margin="5">
+					<Border Grid.Row="0" Grid.ColumnSpan="5" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5">
+						<TextBlock Text="Settings" Foreground="#FFC5CFD1" HorizontalAlignment="Left" Margin="5" />
+					</Border>
+				</Grid>
+
+                    <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal">
+                        <Grid Grid.Row="1" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="DescColumn" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" />
+
+                            <!--Download Directory-->
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="Download Directory:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+                            <TextBox Grid.Column="1" Grid.Row="0" MinWidth="200" Text="{Binding Path=DownloadDirectory}" Margin="5" Foreground="{StaticResource PulseFontColor}" />
+
+                            <!-- Overwrite files -->
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Overwrite Files:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+                            <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=OverwriteDownloadFiles}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Left" />
+
+                            <!-- Parse Data -->
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="Parse Data:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+                            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Path=ParseDownloadedData}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Left" />
+
+                            <!-- Select All files -->
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="Select All Files:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+                            <CheckBox Grid.Column="1" Grid.Row="3" IsChecked="{Binding Path=SelectAllFiles}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Left" />
+
+                            <!--Timeout-->
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="Timeout:" Margin="5" HorizontalAlignment="Right" Foreground="{StaticResource PulseFontColor}" />
+                            <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
+                                <extToolkit:IntegerUpDown HorizontalAlignment="Left" Value="{Binding Path=DownloadTimeout}" Minimum="1" Margin="5" Background="White" />
+                                <TextBlock Text="minutes" Margin="5" Foreground="{StaticResource PulseFontColor}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+                </Grid>
+                
+		</Border>
+		
+		
+		<!--Populate Download List-->
+		<Border Grid.Row="5" Background="{StaticResource PulseBackBorder1Color}" CornerRadius="5" Margin="5">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+		
+				<Grid Grid.Row="0" Margin="5">
+					<Border Grid.Row="0" Grid.ColumnSpan="5" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5">
+						<TextBlock Text="Files" Foreground="#FFC5CFD1" HorizontalAlignment="Left" Margin="5" />
+					</Border>
+				</Grid>
+				
+				<Grid Grid.Row="1" Margin="5" >
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					
+					<!--Total and Used Space-->
+					<Grid Grid.Row="0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						
+						<!--Total Space-->
+						<Border Grid.Column="0" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
+							<TextBlock Text="Total Space:" Margin="5" Foreground="{StaticResource PulseFontColor}" />
+						</Border>
+						<TextBlock Grid.Column="1" Text="{Binding Path=DownloadTotalSpace}" VerticalAlignment="Center" />
+						
+						<!--Used Space-->
+						<Border Grid.Column="2" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
+							<TextBlock Text="Used Space:" Margin="5" Foreground="{StaticResource PulseFontColor}" />
+						</Border>
+						<TextBlock Grid.Column="3" Text="{Binding Path=DownloadUsedSpace}" VerticalAlignment="Center" />
+						
+					</Grid>
+					
+					<!-- Listview of all projects -->
+					<ScrollViewer Grid.Column="0" Grid.Row="1" MaxHeight="300">
+						<ListView ItemsSource="{Binding DownloadFileList}" Margin="5" SelectionMode="Multiple" AlternationCount="2" HorizontalAlignment="Left" Foreground="Black">
+							<ListView.ItemContainerStyle>
+								<Style TargetType="{x:Type ListViewItem}">
+									<!-- IsSelected -->
+									<Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+									<!--Background Colors-->
+									<Setter Property="Background" Value="{StaticResource PulseBackBorder1Color}" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Style.Triggers>
+					                    <Trigger Property="IsSelected" Value="True" >
+					                        <Setter Property="Background" Value="{StaticResource PulseBackBorder3Color}" />
+											<Setter Property="BorderThickness" Value="0" />
+					                    </Trigger>
+										<Trigger Property="IsMouseOver" Value="True" >
+					                        <Setter Property="Background" Value="{StaticResource PulseBackBorder3Color}" />
+											<Setter Property="BorderThickness" Value="0" />
+					                    </Trigger>
+					                </Style.Triggers>
+								</Style>
+							</ListView.ItemContainerStyle>
+							
+							<ListView.View>
+								<GridView>
+									<!-- File Size Column -->
+									<GridViewColumn Header="Download">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+													<CheckBox IsChecked="{Binding Path=IsSelected}" HorizontalAlignment="Center"/>
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>	
+									</GridViewColumn>
+									
+									<!-- File Name Column -->
+									<GridViewColumn Header="File Name">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+													<TextBlock Text="{Binding Path=FileName}" />
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>	
+									</GridViewColumn>
+									
+									<!-- Date and Time Column -->
+									<GridViewColumn Header="Date Time">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+													<TextBlock Text="{Binding Path=ModificationDateTime}" />
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>	
+									</GridViewColumn>
+									
+									<!-- File Size Column -->
+									<GridViewColumn Header="Size (MB)">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+													<TextBlock Text="{Binding Path=FileSize}" />
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>	
+									</GridViewColumn>
+									
+									<!-- File Size Column -->
+									<GridViewColumn Header="Download Progress">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+													<ProgressBar  MinWidth="200" MinHeight="15" Margin="5" Minimum="0" Maximum="{Binding Path=DownloadFileSize}" Value="{Binding Path=DownloadProgress}"/>
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>	
+									</GridViewColumn>
+																					
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</ScrollViewer>
+					
+				</Grid>
+			</Grid>
+		</Border>
+		
+	</Grid>
+	</ScrollViewer>
+</UserControl>

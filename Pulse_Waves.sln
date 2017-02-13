@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse_Waves", "Pulse_Waves\Pulse_Waves.csproj", "{54C43D45-241A-47DC-9E1C-D8821C59446E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33} = {2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33} = {B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9F12C79C-E6B5-45E4-B86E-647136957919}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTI", "RTI\RTI.csproj", "{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse_Display", "Pulse_Display\Pulse_Display.csproj", "{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Minimal Build|Any CPU = Minimal Build|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54C43D45-241A-47DC-9E1C-D8821C59446E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54C43D45-241A-47DC-9E1C-D8821C59446E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54C43D45-241A-47DC-9E1C-D8821C59446E}.Minimal Build|Any CPU.ActiveCfg = Release|Any CPU
+		{54C43D45-241A-47DC-9E1C-D8821C59446E}.Minimal Build|Any CPU.Build.0 = Release|Any CPU
+		{54C43D45-241A-47DC-9E1C-D8821C59446E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54C43D45-241A-47DC-9E1C-D8821C59446E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}.Minimal Build|Any CPU.ActiveCfg = Minimal Build|Any CPU
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}.Minimal Build|Any CPU.Build.0 = Minimal Build|Any CPU
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B69F49CD-CCA9-4532-A4A0-E185CD3FAB33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}.Minimal Build|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}.Minimal Build|Any CPU.Build.0 = Release|Any CPU
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

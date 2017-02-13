@@ -1,0 +1,490 @@
+﻿<UserControl x:Class="RTI.WavesSetupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cal="http://www.caliburnproject.org" 
+             d:DesignHeight="800" d:DesignWidth="1600"
+             Background="{StaticResource PulseBackgroundColor}"
+	            Foreground="{StaticResource PulseFontColor}"
+             >
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+        
+            <!--Buttons-->
+            <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
+                <StackPanel >
+                    <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Waves Control" Margin="5" />
+
+                    <!--Stop ADCP -->
+                    <Button Margin="5" Command="{Binding Path=StopDvlCommand}" HorizontalAlignment="Left" Width="170">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="1." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text=" Stop/Wakeup ADCP" VerticalAlignment="Center" Width="150" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button1}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    
+                    <!--Read ADCP Commnads-->
+                    <Button Margin="5" Command="{Binding Path=ReadAdcpCommand}" HorizontalAlignment="Left" Width="170">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="2." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" HorizontalAlignment="Left" />
+                            <TextBlock Text=" Read ADCP Commands" VerticalAlignment="Center" Width="150" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button2}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--Format the SD card-->
+                    <Button Margin="5" Command="{Binding Path=FormatSdCommand}" HorizontalAlignment="Left" Width="170">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="3." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text=" Format ADCP SD Card" VerticalAlignment="Center" Width="150" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button3}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--Send the commands to the ADCP-->
+                    <Button Margin="5" Command="{Binding Path=SendCommandSetCommand}" HorizontalAlignment="Left" Width="170">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="4." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="Send Commands to ADCP" TextAlignment="Left" VerticalAlignment="Center" Width="150" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button4}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--Set ADCP Time-->
+                    <Button  Margin="5" Command="{Binding Path=SetAdcpTimeCommand}" HorizontalAlignment="Left" Width="170" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="5." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="Set ADCP Time" TextAlignment="Left" Width="150" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button5}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    
+                    <!--Read the ADCP time-->
+                    <Button  Margin="5" Command="{Binding Path=ReadAdcpTimeCommand}" HorizontalAlignment="Left" Width="170" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="6." Foreground="{StaticResource PulseFontBrightColor}" FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="Read ADCP Time" TextAlignment="Left" VerticalAlignment="Center" Width="115" />
+                            <CheckBox IsChecked="{Binding IsSetStartTimeSet}" Margin="5" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button6}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <TextBlock Text="{Binding Path=ReadAdcpTime}"  Margin="5" Foreground="{StaticResource PulseFontColor}"/>
+                    
+                    <Button Margin="5" Command="{Binding Path=SetStartTimeCommand}" HorizontalAlignment="Left" Width="170" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="7." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="Set ADCP Start Time" TextAlignment="Left" Width="115" VerticalAlignment="Center" />
+                            <Button Command="{Binding Path=RefreshCetfpCommand}" Margin="5">
+                                <Viewbox Width="12">
+                                    <Image Grid.Row="0" Source="../Images/refresh.png" />
+                                </Viewbox>
+                            </Button>
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button7}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <extToolkit:DateTimePicker Margin="5" MinWidth="100" Value="{Binding CETFP}" Format="Custom" FormatString="yyyy/MM/dd,HH:mm:ss" AutoCloseCalendar="False" VerticalAlignment="Center" FontSize="15" Foreground="{StaticResource PulseFontBrightColor}">
+                        <extToolkit:DateTimePicker.ToolTip>
+                            <TextBlock Text="{Binding Path=CETFP_Desc}" FontFamily="Courier New" />
+                        </extToolkit:DateTimePicker.ToolTip>
+                    </extToolkit:DateTimePicker>
+
+                    <!--Zero Pressure Sensor-->
+                    <Button Margin="5" Command="{Binding Path=ZeroPressureSensorCommand}" HorizontalAlignment="Left" Width="170" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="8." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="Zero Pressure Sensor" TextAlignment="Left" Width="150" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button8}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--Start ADCP-->
+                    <Button Margin="5" Command="{Binding Path=SendDvlStartCommand}" HorizontalAlignment="Left" Width="170" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="9." Foreground="{StaticResource PulseFontBrightColor}"  FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="START ADCP" TextAlignment="Left" Width="150" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Button9}" Value="True">
+                                        <Setter Property="Background" Value="DarkGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+
+                </StackPanel>
+            </Border>
+        
+            <!--Command Set-->
+            <Border Grid.Row="0" Grid.Column="1" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
+                <Grid>
+                    <StackPanel >
+                        <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Waves Command File" Margin="5" />
+
+                        <ScrollViewer Grid.Row="0" Height="310" Margin="5" VerticalAlignment="Top">
+                            <TextBox Text="{Binding Path=AdcpCommandSet}" TextWrapping="Wrap" AcceptsReturn="True" BorderThickness="0" Background="{StaticResource PulseBackgroundColor}" Margin="5" Foreground="{StaticResource PulseFontColor}" FontFamily="Courier New"/>
+                        </ScrollViewer>
+                        
+                        <TextBlock Text="Additional Commands" Foreground="{StaticResource PulseFontHighlightColor}" Margin="5,2" />
+
+                        <ScrollViewer Grid.Row="0" Height="50" Margin="5" VerticalAlignment="Top" ToolTip="Add additional commands to the command file.">
+                            <TextBox Text="{Binding Path=AdditionalAdcpCommandSet}" TextWrapping="Wrap" AcceptsReturn="True" BorderThickness="0" Background="{StaticResource PulseBackgroundColor}" Margin="5" Foreground="{StaticResource PulseFontColor}" FontFamily="Courier New"/>
+                        </ScrollViewer>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Save Command File" Margin="5" Command="{Binding Path=SaveCommandSetCommand}" />
+                            <Button Content="Load Command File" Margin="5" Command="{Binding Path=ImportCommandSetCommand}" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <!--Clear the input data button-->
+                    <Button Grid.Row="0" Grid.Column="1" Command="{Binding Path=ClearCommandSetCommand}" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,10,20,0" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="15" Height="15">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource sweep}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
+
+            </Border>
+
+            <!--Terminal Window-->
+            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5" MaxWidth="550">
+                <Grid>
+                    <StackPanel>
+
+                        <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Terminal" Margin="5" />
+
+                        <ScrollViewer Height="250" Margin="5" ScrollChanged="ScrollViewer_ScrollChanged">
+                            <TextBox Text="{Binding Path=AdcpReceiveBuffer, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" Background="{StaticResource PulseBackgroundColor}" MinWidth="300" Margin="5" Foreground="{StaticResource PulseFontColor}" FontFamily="Courier New" />
+                        </ScrollViewer>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <!--Editable Combobox Textbox History http://stackoverflow.com/questions/3373239/wpf-editable-combobox-->
+                            <ComboBox Grid.Column="0" HorizontalContentAlignment="Stretch" IsEditable="True" ItemsSource="{Binding AdcpCommandHistory}" SelectedItem="{Binding SelectedAdcpCommand}" Text="{Binding NewAdcpCommand, UpdateSourceTrigger=LostFocus}" PreviewKeyDown="ComboBox_PreviewKeyDown" Margin="5" />
+                            <Button Grid.Column="1" Content="Send" HorizontalAlignment="Right" IsDefault="True" Command="{Binding SendCommand}" Margin="5" />
+                        </Grid>
+                        <StackPanel>
+                            <Button Content="WAKEUP/STOP ADCP" Margin="5" Command="{Binding Path=StopDvlCommand}" HorizontalAlignment="Left" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--Clear the input data button-->
+                    <Button Grid.Row="0" Grid.Column="1" Command="{Binding Path=ClearTerminalCommand}" Style="{DynamicResource MetroCircleButtonStyle}" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,10,20,0" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="15" Height="15">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource sweep}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
+            </Border>
+
+            <!--DVL Setup-->
+            <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
+                <StackPanel >
+                    <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Waves Setup" Margin="5" />
+
+                    <!--Hardware Connection-->
+                    <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                        <TextBlock Text="{Binding Path=HardwareConnection}" Margin="10,5" />
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal">
+                        <!--Read the ADCP-->
+                        <Button Content="Read Commands"  Margin="5" Command="{Binding Path=ReadAdcpCommand}"  />
+                        
+                        <Border Margin="5,0" Background="{StaticResource PulseBackBorder3Color}" CornerRadius="2">
+                            <StackPanel Orientation="Horizontal">
+
+
+                                <ComboBox ItemsSource="{Binding DefaultOptionsList}" SelectedItem="{Binding Path=SelectedDefaultOption}" Width="75" Margin="5" />
+                            
+                                <!--Set the default values-->
+                                <Button Content="Set Defaults"  Margin="5" Command="{Binding Path=SetDefaultCommand}"  />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal">
+                        <!--Hardware-->
+                        <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                            <StackPanel>
+                                <TextBlock Foreground="{StaticResource PulseFontBrightColor}" Text="Hardware" Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
+                            
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Serial Output" Margin="5" VerticalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding CEOUTPUT}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Center" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=CEOUTPUT_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Recording     " Margin="5" VerticalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding CERECORD}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Center" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=CERECORD_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!--Environmental-->
+                        <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                            <StackPanel>
+                                <TextBlock Foreground="{StaticResource PulseFontBrightColor}" Text="Environment" Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
+
+                                <!--Water Depth-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Transducer Depth (m)   " Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=SPOS_WaterDepth}" Margin="5" Minimum="0" Increment="0.5" Background="White" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=SPOS_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+
+                                <!--Psens Height (m)-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Psens Height (m)           " Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=SPOS_PsensHeight}" Margin="5" Minimum="0" Increment="0.5" Background="White" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=SPOS_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+
+                                <!--Salinity (ppt)-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Salinity (ppt)                  " Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=CWS}" Margin="5" Minimum="0" Increment="0.5" Background="White" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=CWS_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+
+                                <!--Temperature (deg)-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Temperature (deg)        " Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=CWT}" Margin="5" Minimum="0" Increment="0.5" Background="White" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=CWT_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+
+                                <!--Latitude (deg)-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Latitude (deg)   " Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=SPOS_Latitude}" Margin="5" Minimum="-90.00" Maximum="90.00"  Increment="0.5" Width="100" Background="White" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=SPOS_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+
+                                <!--Longitude (deg)-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Longitude (deg)" Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:DecimalUpDown Value="{Binding Path=SPOS_Longitude}" Margin="5" Minimum="-180.00" Maximum="180.00"  Increment="0.5" Width="100" Background="White" />
+                                    <StackPanel.ToolTip>
+                                        <TextBlock Text="{Binding Path=SPOS_Desc}" FontFamily="Courier New" />
+                                    </StackPanel.ToolTip>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </Border>
+                        
+                        <!--Prediction Model-->
+                        <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                            <StackPanel>
+                                <TextBlock Foreground="{StaticResource PulseFontBrightColor}" Text="Prediction Model" Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
+
+                                <!--Deployment Duration-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Deployment Duration (days) " Margin="5" VerticalAlignment="Center" />
+                                    <extToolkit:IntegerUpDown Value="{Binding Path=DeploymentDuration}" Margin="5" Minimum="1" Increment="1" Background="White" />
+                                </StackPanel>
+                                
+                                
+                                <Border Background="{StaticResource PulseBackBorder2Color}" Margin="5" CornerRadius="2">
+                                    <StackPanel Margin="5">
+                                        
+                                        <!--Power Usage-->
+                                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                                            <TextBlock Text="Power Usage:   " Foreground="{StaticResource PulseFontColor}" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                                            <TextBlock Text="{Binding Path=PredictedPowerUsage}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
+                                        </StackPanel> 
+
+                                        <!--Battery Usage-->
+                                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                                            <TextBlock Text="Battery Usage: " Foreground="{StaticResource PulseFontColor}" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                                            <TextBlock Text="{Binding Path=PredictedNumberOfBatteries}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
+                                        </StackPanel>
+                                
+                                        <!--Memory Usage-->
+                                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                                            <TextBlock Text="Memory Usage:  " Foreground="{StaticResource PulseFontColor}" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                                            <TextBlock Text="{Binding Path=PredictedMemoryUsage}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+
+
+                    <!--Subsystem-->
+                    <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+
+                            <StackPanel>
+                                <TextBlock Text="Subsystems" Foreground="{StaticResource PulseFontBrightColor}" Margin="5"  FontWeight="Bold"/>
+                                <ComboBox Width="90" ItemsSource="{Binding Path=ListOfSubsystems}" SelectedItem="{Binding Path=SelectedSubsystem}" Margin="5" />
+                                <Button Content="Add Subsystem" Margin="5" Command="{Binding Path=AddSubsystemCommand}" />
+                            </StackPanel>
+
+                            <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Auto" MaxWidth="730" MaxHeight="600" >
+                                <!--Subsystem Configurations-->
+                                <Grid Margin="5">
+                                    <ListBox ItemsSource="{Binding SubsystemConfigList}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ContentControl cal:View.Model="{Binding}" />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <!--Change to horizontal items-->
+                                        <!--ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel IsItemsHost="True" />
+                                            </ItemsPanelTemplate>
+                                        </-->
+                                        <!--Change the hightlight colors-->
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True" >
+                                                        <!--Setter Property="FontWeight" Value="Bold" /-->
+                                                        <Setter Property="Background" Value="Transparent" />
+                                                        <Setter Property="Foreground" Value="Black" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                                <Style.Resources>
+                                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                                </Style.Resources>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                    </ListBox>
+                                </Grid>
+                            </ScrollViewer>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Border>
+
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

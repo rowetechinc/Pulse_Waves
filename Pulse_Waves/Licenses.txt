@@ -1,0 +1,79 @@
+﻿MVVM Framework
+Caliburn.Micro
+http://caliburnmicro.codeplex.com/
+License: MIT
+
+MVVM Framework
+ReactiveUI
+http://www.reactiveui.net/
+License: MS-PL
+
+Widgets:
+Extended WPF Toolkit
+http://wpftoolkit.codeplex.com/
+License: Ms-PL
+
+Sqlite
+System.Data.SQLite
+http://system.data.sqlite.org
+License: Open Source
+
+Plots
+OxyPlot
+http://oxyplot.codeplex.com/
+License: Ms-PL
+
+UI Kit
+MahApps.Metro
+http://mahapps.com/MahApps.Metro/
+License: Ms-PL
+
+Icons
+Open Icon Library
+http://openiconlibrary.sourceforge.net/
+License: Open Source
+
+Icons 
+Entypo
+http://www.entypo.com/
+License: CC BY-SA 3.0
+
+Icons
+Modern UI Icons
+http://modernuiicons.com/
+License: CC BY-SA 3.0
+
+3D Library
+Helix 3D Toolkit
+http://helixtoolkit.codeplex.com/
+License: Ms-PL
+
+Spatial Library
+DotSpatial
+http://dotspatial.codeplex.com/
+License: LGPL
+
+Logger
+Log4Net
+http://logging.apache.org/log4net/index.html
+License: Apache License, Version 2.0
+
+JSON
+Newtonsoft Json
+https://github.com/JamesNK/Newtonsoft.Json
+License: MIT
+
+AutoUpdate
+AutoUpdater.NET
+http://autoupdaterdotnet.codeplex.com/
+License: Ms-PL
+
+Combine dlls
+Costura.Fody
+https://github.com/Fody/Costura
+License: MIT
+
+Bitmap Writer
+WriteableBitmapEx
+http://writeablebitmapex.codeplex.com/
+License: Ms-PL
