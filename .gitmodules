@@ -1,0 +1,6 @@
+[submodule "Pulse-Display"]
+	path = Pulse-Display
+	url = https://github.com:rowetechin/rowetechinc/Pulse-Display
+[submodule "RTI"]
+	path = RTI
+	url = https://github.com:rowetechin/rowetechinc/RTI

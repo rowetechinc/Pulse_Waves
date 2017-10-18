@@ -1,5 +1,14 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.2.1
+ - Fixed bug in Prediction model with calculating the data storage.
+
+Pulse_Waves-1.2.0
+  - Updated the prediction model.
+
+Pulse_Waves-1.1.8
+ - Set CWPTBP automatically based off CEI and number of pings.
+
 Pulse_Waves-1.1.7
  - Changed file import to handle large files.
 

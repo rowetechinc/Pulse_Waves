@@ -1265,7 +1265,7 @@ namespace RTI
                 System.Windows.Application.Current.Dispatcher.Invoke(new System.Action(() =>
                 {
                     // Set the deployment duration for the prediction model
-                    wavesSubConfig.AdcpPredictor.DeploymentDuration = _DeploymentDuration;
+                    wavesSubConfig._PredictionModelInput.DeploymentDuration = _DeploymentDuration;
 
                     SubsystemConfigList.Add(wavesSubConfig);
                     this.NotifyOfPropertyChange(() => this.SubsystemConfigList);
@@ -1732,7 +1732,7 @@ public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel 
             // Update the VM
             foreach (var vm in SubsystemConfigList)
             {
-                vm.AdcpPredictor.DeploymentDuration = DeploymentDuration;
+                vm._PredictionModelInput.DeploymentDuration = DeploymentDuration;
             }
 
             // Update the prediction model
@@ -1755,10 +1755,10 @@ public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel 
                 predictedMemoryUsage += vm.GetMemoryUsage();
 
                 // Power Usage
-                var ssWattHrUsage = vm.GetWattHrUsage(_AdcpConfig);
+                var ssWattHrUsage = vm.GetWattHrUsage();
                 predictedPowerUsage += ssWattHrUsage;
                 vm.PredictedPowerUsage = ssWattHrUsage.ToString("0.00") + " Watt/Hr";           // Set the VM for the pwr usage
-                numBatt += vm.GetTotalBatteryUsage(_AdcpConfig); 
+                numBatt += vm.GetTotalBatteryUsage(); 
 
                 //if (!vm.CBI_Enabled)
                 //{
@@ -1847,6 +1847,12 @@ public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel 
                 SubsystemConfigList[1].CWPBL = blank2;
                 SubsystemConfigList[1].CWPBS = binSize2;
                 SubsystemConfigList[1].CWPBB_LagLength = lag2;
+
+                // Set Interleaved for first and second subsystem
+                // Only the first subsystem needs to be turned on
+                SubsystemConfigList[0].CBI_Interleaved = true;
+                SubsystemConfigList[1].CBI_Interleaved = false;
+
             }
 
             // Other settings

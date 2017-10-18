@@ -91,7 +91,7 @@ namespace RTI
             /// Used to denote Beta or Alpha builds.  Or any
             /// special branches of the application.
             /// </summary>
-            public const string VERSION_ADDITIONAL = " Beta";
+            public const string VERSION_ADDITIONAL = "s";
 
             #endregion
 

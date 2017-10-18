@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="530" d:DesignWidth="700"
+             d:DesignHeight="530" d:DesignWidth="800"
 	        Foreground="{StaticResource PulseFontColor}">
     
     <Border Background="{StaticResource PulseBackBorder3Color}" Margin="5" >
@@ -60,7 +60,7 @@
                         </StackPanel>
 
                         <!--CWPBB-->
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Lag Length (m):                  " Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
                             <extToolkit:DecimalUpDown Value="{Binding Path=CWPBB_LagLength}" Minimum="0" Increment="0.1" Margin="5" Background="White" />
                             <StackPanel.ToolTip>
@@ -69,7 +69,7 @@
                         </StackPanel>
 
                         <!--CWPP-->
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Pings per Ensemble (ping):" Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
                             <extToolkit:IntegerUpDown Value="{Binding Path=CWPP}" Minimum="0" Margin="5" Background="White" />
                             <StackPanel.ToolTip>
@@ -77,6 +77,15 @@
                             </StackPanel.ToolTip>
                         </StackPanel>
 
+                        <!--CWPTBP-->
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding Path=CBI_Enabled, Converter={StaticResource BoolToVisConverter}}">
+                            <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Time Between Pings (s):     " Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
+                            <extToolkit:DecimalUpDown Value="{Binding Path=CWPTBP}" Minimum="0" Margin="5" Increment="0.1" Background="White" />
+                            <StackPanel.ToolTip>
+                                <TextBlock Text="{Binding Path=CWPTBP_Desc}" FontFamily="Courier New" />
+                            </StackPanel.ToolTip>
+                        </StackPanel>
+                        
                     </StackPanel>
                     
 
@@ -90,6 +99,9 @@
 
                         <!--Burst Mode Flag-->
                         <StackPanel Orientation="Horizontal">
+                            <StackPanel.ToolTip>
+                                <TextBlock Text="{Binding Path=CBI_Desc}" FontFamily="Courier New" />
+                            </StackPanel.ToolTip>
                             <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Burst Mode                         " Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
                             <CheckBox IsChecked="{Binding CBI_Enabled}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Center" />
                         </StackPanel>
@@ -224,26 +236,32 @@
                 
                     <!--Max Vel-->
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Maximum Velocity: " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                        <TextBlock Text="Maximum Velocity:   " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
                         <TextBlock Text="{Binding Path=MaximumVelocity}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
                     </StackPanel>
 
                     <!--Standard Deviation-->
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Standard Dev:     " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                        <TextBlock Text="Standard Dev:       " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
                         <TextBlock Text="{Binding Path=StandardDeviation}" FontFamily="Courier New" Foreground="{StaticResource PulseFontColor}" />
                     </StackPanel>
 
                     <!--Range-->
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Range:            " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                        <TextBlock Text="Range:              " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
                         <TextBlock Text="{Binding Path=PredictedProfileRange}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
                     </StackPanel>
 
-                    <!--Range-->
+                    <!--Power Usage-->
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Power Usage:   " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                        <TextBlock Text="Power Usage:        " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
                         <TextBlock Text="{Binding Path=PredictedPowerUsage}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
+                    </StackPanel>
+
+                    <!--First Bin Position-->
+                    <StackPanel Orientation="Horizontal" ToolTip="First Bin Position.  Blanking distance.  The start of the profile.  The distance is from the face of the transducers.">
+                        <TextBlock Text="First Bin Position: " Foreground="{StaticResource PulseFontColor}" Margin="5,0" HorizontalAlignment="Left" FontFamily="Courier New"  />
+                        <TextBlock Text="{Binding Path=PredictedFirstBinPosition}" FontFamily="Courier New"  Foreground="{StaticResource PulseFontColor}" />
                     </StackPanel>
 
                 </StackPanel>

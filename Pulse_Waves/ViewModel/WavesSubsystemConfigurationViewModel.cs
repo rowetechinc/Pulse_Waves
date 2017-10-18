@@ -30,6 +30,7 @@
  * 03/16/2016      RC          1.1.3       Added Range Tracking.
  * 06/07/2016      RC          1.1.6       Fixed bug with prediction models for subsystem being out of sync with main prediciton model.
  *                                         Fixed bug where CWPP was 1 but CWPTBP had a value.
+ * 04/11/2017      RC          1.1.8       Set CWPTBP automatically based off CEI and number of pings.
  */
 
 using ReactiveUI;
@@ -276,7 +277,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CWPBL);
 
                 // Update predictor
-                AdcpPredictor.CWPBL = value;
+                _PredictionModelInput.CWPBL = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -311,7 +312,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CWPBS);
 
                 // Update predictor
-                AdcpPredictor.CWPBS = value;
+                _PredictionModelInput.CWPBS = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -346,7 +347,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CWPBN);
 
                 // Update predictor
-                AdcpPredictor.CWPBN = value;
+                _PredictionModelInput.CWPBN = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -387,14 +388,18 @@ namespace RTI
                 // If there is only 1 ping, then set the TBP to 0
                 if (value == 1)
                 {
-                    CWPTBP = 0;
+                    CWPTBP = 0.13f;
+                }
+                else
+                {
+                    CWPTBP = CEI / value;
                 }
 
                 AdcpSubConfig.Commands.CWPP = value;
                 this.NotifyOfPropertyChange(() => this.CWPP);
 
                 // Update predictor
-                AdcpPredictor.CWPP = value;
+                _PredictionModelInput.CWPP = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -429,7 +434,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CWPBB_LagLength);
 
                 // Update predictor
-                AdcpPredictor.CWPBB_LagLength = value;
+                _PredictionModelInput.CWPBB_LagLength = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -464,7 +469,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CWPTBP);
 
                 // Update predictor
-                AdcpPredictor.CWPTBP = value;
+                _PredictionModelInput.CWPTBP = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -499,7 +504,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CBTON);
 
                 // Update predictor
-                AdcpPredictor.CBTON = value;
+                _PredictionModelInput.CBTON = value;
                 UpdatePredictionModel();
 
                 // Update the display
@@ -554,7 +559,7 @@ namespace RTI
                 //this.NotifyOfPropertyChange(() => this.CBI_WarningStr);
 
                 //// Update predictor
-                //AdcpPredictor.CEI = value;
+                //PredictionModel.CEI = value;
                 //UpdatePredictionModel();
 
                 // Update all the VM with the new CEI
@@ -578,7 +583,7 @@ namespace RTI
                 this.NotifyOfPropertyChange(() => this.CEI_Timespan);
             }
         }
-        
+
 
         #endregion
 
@@ -587,7 +592,12 @@ namespace RTI
         /// <summary>
         /// ADCP Prediction model.
         /// </summary>
-        public AdcpPredictor AdcpPredictor { get; set; }
+        public PredictionModel _PredictionModel;
+
+        /// <summary>
+        /// ADcp PRediction Model Input.
+        /// </summary>
+        public PredictionModelInput _PredictionModelInput;
 
         /// <summary>
         /// ADCP Prediction model predicted Profile Range.
@@ -654,6 +664,23 @@ namespace RTI
             {
                 _PredictedPowerUsage = value;
                 this.NotifyOfPropertyChange(() => this.PredictedPowerUsage);
+            }
+        }
+
+        /// <summary>
+        /// ADCP Prediction model predicted first bin position.
+        /// </summary>
+        private string _PredictedFirstBinPosition;
+        /// <summary>
+        /// ADCP Prediction model predicted First bin position.
+        /// </summary>
+        public string PredictedFirstBinPosition
+        {
+            get { return _PredictedFirstBinPosition; }
+            set
+            {
+                _PredictedFirstBinPosition = value;
+                this.NotifyOfPropertyChange(() => this.PredictedFirstBinPosition);
             }
         }
 
@@ -865,17 +892,19 @@ namespace RTI
         /// </summary>
         public void Init()
         {
-            AdcpPredictor = new AdcpPredictor(new AdcpPredictorUserInput());
-
+            _PredictionModel = new PredictionModel();
+            _PredictionModelInput = new PredictionModelInput();
             if (AdcpSubConfig.Commands.CBI_BurstInterval.ToSecondsD() > 0)
             {
                 CBI_Enabled = true;
+                _PredictionModelInput.IsBurst = true;
             }
             else
             {
                 CBI_Enabled = false;
+                _PredictionModelInput.IsBurst = false;
             }
-
+          
             CWPBL = AdcpSubConfig.Commands.CWPBL;
             CWPBS = AdcpSubConfig.Commands.CWPBS;
             CWPBN = AdcpSubConfig.Commands.CWPBN;
@@ -901,7 +930,11 @@ namespace RTI
             RangeTrackingN1 = AdcpSubConfig.Commands.CWPRT_FirstBin;
             RangeTrackingN2 = AdcpSubConfig.Commands.CWPRT_LastBin;
 
-
+            // If a vertical beam, turn on Range Tracking
+            if(Subsystem.IsVerticalBeam(AdcpSubConfig.SubsystemConfig.SubSystem.Code))
+            {
+                RangeTrackingMode = RangeTrackingModeBin;
+            }
 
             // Default for a waves system
             AdcpSubConfig.Commands.CWPON = true;
@@ -914,16 +947,20 @@ namespace RTI
             DisplayTimeSpan(CEI);
 
             // Create the user input and recreate the predictor
-            AdcpPredictorUserInput predInput = new AdcpPredictorUserInput(AdcpSubConfig.SubsystemConfig.SubSystem)
+            _PredictionModelInput = new PredictionModelInput(AdcpSubConfig.SubsystemConfig.SubSystem)
             {
                 CWPBL = CWPBL,
                 CWPBS = CWPBS,
                 CWPBN = CWPBN,
                 CWPP = CWPP,
                 CWPBB_LagLength = CWPBB_LagLength,
-                CEI = CEI
+                CEI = CEI,
+                CWPTBP = CWPTBP,
+                CBI_BurstInterval = (float)AdcpSubConfig.Commands.CBI_BurstInterval.ToSecondsD(),
+                CBI_IsInterleaved = AdcpSubConfig.Commands.CBI_BurstPairFlag,
+                CWPON = AdcpSubConfig.Commands.CWPON,
+                CWPBB_TransmitPulseType = AdcpSubConfig.Commands.CWPBB_TransmitPulseType
             };
-            AdcpPredictor = new AdcpPredictor(predInput);
         }
 
         /// <summary>
@@ -959,36 +996,16 @@ namespace RTI
         /// </summary>
         private void UpdatePredictionModel()
         {
-            // If using burst, use the waves
-            // calculation model to predict
-            if (CBI_Enabled)
-            {
-                double range = 0.0;
-                double sd = 0.0;
-                double maxVel = 0.0;
-                double firstBinLocation = 0.0;
-                AdcpPredictor.WavesModelPUV(AdcpSubConfig.SubsystemConfig.SubSystem,                // ss
-                                            CWPBS,                                                  // Bin Size
-                                            CWPBL,                                                  // Blank
-                                            CWPBB_LagLength,                                        // Lag Length
-                                            out range,                                              // Range
-                                            out sd,                                                 // STD
-                                            out maxVel,                                             // Max Vel
-                                            out firstBinLocation);                                  // First bin location
-
+           
                 // Output the strings
-                PredictedProfileRange = range.ToString("0.00") + " m";
-                MaximumVelocity = maxVel.ToString("0.00") + " m/s";
-                StandardDeviation = sd.ToString("0.00") + " m/s";
-            }
+            PredictedProfileRange = _PredictionModel.GetPredictedRange(_PredictionModelInput).WaterProfile.ToString("0.00") + " m";
+            MaximumVelocity = _PredictionModel.GetMaxVelocity(_PredictionModelInput).ToString("0.00") + " m/s";
+            StandardDeviation = _PredictionModel.GetStandardDeviation(_PredictionModelInput).ToString("0.00") + " m/s";
+            PredictedFirstBinPosition = _PredictionModel.GetPredictedRange(_PredictionModelInput).FirstBinPosition.ToString("0.00") + " m";
+            if (CBI_Enabled)
+                PredictedPowerUsage = _PredictionModel.CalculatePowerBurst(_PredictionModelInput).ToString("0.00") + " Watt/Hr";
             else
-            {
-                // Use the standard predictor to get the prediction
-                PredictedProfileRange = AdcpPredictor.PredictedProfileRange.ToString("0.00") + " m";
-                MaximumVelocity = AdcpPredictor.MaximumVelocity.ToString("0.00") + " m/s";
-                StandardDeviation = AdcpPredictor.StandardDeviation.ToString("0.00") + " m/s";
-                PredictedPowerUsage = AdcpPredictor.TotalPower.ToString("0.00") + " Watt/Hr";
-            }
+                PredictedPowerUsage = _PredictionModel.CalculatePower(_PredictionModelInput).ToString("0.00") + " Watt/Hr";
         }
 
         /// <summary>
@@ -997,7 +1014,7 @@ namespace RTI
         /// <returns>Number of bytes used in a burst.</returns>
         public long GetBurstMemoryUsage()
         {
-            return AdcpPredictor.WavesRecordBytesPerBurst(CBI_NumEnsembles, CWPBN);
+            return _PredictionModel.GetDataStorageBurst(_PredictionModelInput);
         }
 
         /// <summary>
@@ -1012,11 +1029,11 @@ namespace RTI
         {
             if(CBI_Enabled)
             {
-                return AdcpPredictor.WavesRecordBytesPerDeployment(CBI_NumEnsembles, CWPBN, AdcpPredictor.DeploymentDuration, CBI_BurstInterval);
+                return GetBurstMemoryUsage();
             }
             else
             {
-                return AdcpPredictor.DataSizeBytes;
+                return _PredictionModel.GetDataStorage(_PredictionModelInput);
             }
         }
 
@@ -1025,20 +1042,15 @@ namespace RTI
         /// </summary>
         /// <param name="adcpConfig">ADCP Configuration.</param>
         /// <returns>Watt Hours used in the deployment.</returns>
-        public double GetWattHrUsage(AdcpConfiguration adcpConfig)
+        public double GetWattHrUsage()
         {
             if(_CBI_Enabled)
             {
-                return AdcpPredictor.WavesRecordWattHours(AdcpSubConfig.SubsystemConfig.SubSystem,          // Subsystem 
-                                                            adcpConfig,                                     // ADCP Configuration
-                                                            CBI_NumEnsembles,                               // Samples in Burst
-                                                            CEI,                                            // Sample Rate
-                                                            AdcpPredictor.DeploymentDuration,               // Deployment Duration
-                                                            CBI_BurstInterval);                             // Number of beams in Primary ADCP
+                return _PredictionModel.CalculatePowerBurst(_PredictionModelInput);
             }
             else
             {
-                return AdcpPredictor.TotalPower;
+                return _PredictionModel.CalculatePower(_PredictionModelInput);
             }
         }
 
@@ -1046,17 +1058,9 @@ namespace RTI
         /// Get the total number of batteries for a deployment.
         /// </summary>
         /// <returns>Total batteries in the deployment.</returns>
-        public double GetTotalBatteryUsage(AdcpConfiguration adcpConfig)
+        public double GetTotalBatteryUsage()
         {
-            if(_CBI_Enabled)
-            {
-                double pwrUsage = GetWattHrUsage(adcpConfig);
-                return pwrUsage / AdcpPredictor.ActualBatteryPower;
-            }
-            else
-            {
-                return AdcpPredictor.NumberBatteryPacks;
-            }
+            return _PredictionModel.BatteryUsage(_PredictionModelInput);
         }
 
         #endregion
@@ -1070,6 +1074,7 @@ namespace RTI
         public void UpdateBurstMode(bool flag)
         {
             _CBI_Enabled = flag;
+            _PredictionModelInput.IsBurst = flag;
             this.NotifyOfPropertyChange(() => this.CBI_Enabled);
             this.NotifyOfPropertyChange(() => this.CBI_Disabled);
 
@@ -1097,7 +1102,7 @@ namespace RTI
         {
             AdcpSubConfig.Commands.CBI_BurstPairFlag = flag;
             this.NotifyOfPropertyChange(() => this.CBI_Interleaved);
-
+            _PredictionModelInput.CBI_IsInterleaved = flag;
             // Update the display
             _wavesSetupVM.UpdateCommandSet();
             
@@ -1133,6 +1138,9 @@ namespace RTI
         /// <param name="value">Value to set.</param>
         public void UpdateCEI(float value)
         {
+            // Update the CWPTBP command
+            CWPTBP = value / CWPP;
+
             // Display Time span
             DisplayTimeSpan(value);
 
@@ -1144,7 +1152,7 @@ namespace RTI
             this.NotifyOfPropertyChange(() => this.CBI_WarningStr);
 
             // Update predictor
-            AdcpPredictor.CEI = value;
+            _PredictionModelInput.CEI = value;
             UpdatePredictionModel();
 
             // Update the display
@@ -1173,17 +1181,17 @@ namespace RTI
                     }
                 }
             }
-            // Remove the CWPTBP command
-            else
-            {
-                for (int x = 0; x < cmds.Count; x++)
-                {
-                    if (cmds[x].Contains(Commands.AdcpSubsystemCommands.CMD_CWPTBP))
-                    {
-                        cmds.RemoveAt(x);
-                    }
-                }
-            }
+            //// Remove the CWPTBP command
+            //else
+            //{
+            //    for (int x = 0; x < cmds.Count; x++)
+            //    {
+            //        if (cmds[x].Contains(Commands.AdcpSubsystemCommands.CMD_CWPTBP))
+            //        {
+            //            cmds.RemoveAt(x);
+            //        }
+            //    }
+            //}
 
             return cmds;
         }

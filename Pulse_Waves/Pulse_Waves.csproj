@@ -298,16 +298,6 @@
     <Resource Include="logo_small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pulse_Display\Pulse_Display.csproj">
-      <Project>{2be9ad8a-5bd6-4a6c-89dc-1abc6ceb7e33}</Project>
-      <Name>Pulse_Display</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RTI\RTI.csproj">
-      <Project>{b69f49cd-cca9-4532-a4a0-e185cd3fab33}</Project>
-      <Name>RTI</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Installer\License.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -324,6 +314,7 @@
     <Resource Include="Images\calibration.png" />
     <Resource Include="Images\format.png" />
     <Resource Include="Images\import.png" />
+    <SplashScreen Include="Images\all_adcp.png" />
     <Content Include="Licenses.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -344,6 +335,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pulse-Display\Pulse_Display.csproj">
+      <Project>{2be9ad8a-5bd6-4a6c-89dc-1abc6ceb7e33}</Project>
+      <Name>Pulse_Display</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RTI\RTI.csproj">
+      <Project>{b69f49cd-cca9-4532-a4a0-e185cd3fab33}</Project>
+      <Name>RTI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

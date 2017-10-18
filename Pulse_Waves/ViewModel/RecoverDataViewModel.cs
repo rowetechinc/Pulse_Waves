@@ -139,7 +139,7 @@ namespace RTI
         /// <summary>
         /// Binary Codec for binary files.
         /// </summary>
-        private AdcpBinaryCodec _adcpCodec;
+        private AdcpBinaryCodecNew _adcpCodec;
 
         /// <summary>
         /// Event to cause the thread
@@ -795,9 +795,9 @@ namespace RTI
             // Waves processing
             _rtiWavesEncoder = new Waves.RtiWavesEncoder();
 
-            _adcpCodec = new AdcpBinaryCodec();
-            _adcpCodec.ProcessDataEvent += new AdcpBinaryCodec.ProcessDataEventHandler(_adcpCodec_ProcessDataEvent);
-            _adcpCodec.ProcessDataCompleteEvent += new AdcpBinaryCodec.ProcessDataCompleteEventHandler(_adcpCodec_ProcessDataCompleteEvent);
+            _adcpCodec = new AdcpBinaryCodecNew();
+            _adcpCodec.ProcessDataEvent += new AdcpBinaryCodecNew.ProcessDataEventHandler(_adcpCodec_ProcessDataEvent);
+            _adcpCodec.ProcessDataCompleteEvent += new AdcpBinaryCodecNew.ProcessDataCompleteEventHandler(_adcpCodec_ProcessDataCompleteEvent);
 
             // Subscribe to recevie download events from the serial port and ethernet
             SubscribeDownloadEvents();
