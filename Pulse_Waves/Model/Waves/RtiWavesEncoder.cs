@@ -28,6 +28,7 @@
  * 10/15/2015      RC          0.0.3      Cleanup and recode the matlab encoding.
  * 10/16/2015      RC          0.0.3      Fixed bug with encoding to matlab with the columns not be written correctly.
  * 11/04/2015      RC          1.0.0      Fixed bug if the burst is only a 4beam or vertical, no interleave, then set the correct sample time in WavesCreateMatFile().
+ * 11/23/20117     RC          1.2.2      Fixed a bug iterating through the list of MATLAB files and list is changed.
  * 
  */
 
@@ -1075,8 +1076,10 @@ namespace RTI
                 //int wavesRecordNumber = 0;
 
                 // Go through every record
-                foreach (var record in WavesRecords)
+                for(int wr = 0; wr < WavesRecords.Count; wr++)
                 {
+                    var record = WavesRecords[wr];
+
                     // Verify that record has data
                     if (record.WaveSamples.Count > 0)
                     {

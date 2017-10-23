@@ -1,5 +1,12 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.2.2
+ - Fix bug loading Wavector.
+ - Added a default path for Wavector.
+ - Updated the Prediction model on startup.  
+ - Fixed bug with not passing BurstInterval to prediction model.
+ - RtiWavesEncoder, fixed a bug iterating through the list of MATLAB files and list is changed.
+
 Pulse_Waves-1.2.1
  - Fixed bug in Prediction model with calculating the data storage.
 

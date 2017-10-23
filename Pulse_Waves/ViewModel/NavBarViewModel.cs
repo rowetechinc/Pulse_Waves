@@ -29,6 +29,7 @@
  * 02/12/2014      RC          3.2.3      Added VesselMountCommand.
  * 07/09/2014      RC          3.4.0      Added AveragingCommand.
  * 08/07/2014      RC          4.0.0      Updated ReactiveCommand to 6.0.
+ * 10/23/2017      RC          1.2.2      Fixed bug with path to WaVectorExe.txt.  Added more logic for missing file. 
  * 
  */
 
@@ -204,42 +205,108 @@ namespace RTI
                     string selectedFilesPath = RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorSelectedFiles.txt";
                     System.IO.File.WriteAllText(selectedFilesPath, selectedFiles);
 
-                    // Run the command based off the file
-                    string exePath = RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt";
-                    if(File.Exists(exePath))
-                    {
-                        // Read in the file and execute the command
-                        string strCmd = File.ReadAllText(exePath);
+                    // Run Wavector
+                    RunWavector();
 
-                        // Check if a path was given
-                        if (string.IsNullOrEmpty(strCmd))
-                        {
-                            System.Windows.MessageBox.Show("WaVector executable path file is empty.  Please enter the WaVector executable path in the file.  " + RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", "Missing Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            // Execute command
-                            string strCmdText = RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorSelectedFiles.txt";
-                            System.Diagnostics.Process.Start(strCmd, strCmdText);
-                        }
-                    }
-                    else
-                    {
-                        // File does not exist so create a blank file
-                        using (StreamWriter sw = new StreamWriter(RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", false))
-                        {
-                            // Just create the file and close it
-                        }
-
-                        // Give a warning
-                        System.Windows.MessageBox.Show("WaVector executable path file does not exist at: " + RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorExe.txt.  A blank file will be created.  Please enter the WaVector executable path in the file.", "Missing Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
-                    }
                 }
             }
             catch(Exception e)
             {
                 log.Error("Error loading wavector.", e);
             }
+        }
+
+        /// <summary>
+        /// Check if the wave vector path is given in the file WaVectorExe.txt.
+        /// If it is not, try to create the file with a default path.
+        /// If that still does not work, give a warning to the user.
+        /// 
+        /// If the path does exist, execute Wavector with the file containing the list of all the files to load into Wavector (WaVectorSelectedFiles.txt).
+        /// </summary>
+        private bool RunWavector()
+        {
+            // Run the command based off the file
+            string exePath = RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt";
+            if (File.Exists(exePath))
+            {
+                // Read in the file and execute the command
+                string strCmd = File.ReadAllText(exePath);
+
+                // Check if a path was given
+                if (string.IsNullOrEmpty(strCmd))
+                {
+                    System.Windows.MessageBox.Show("WaVector executable path file is empty.  Please enter the WaVector executable path in the file.  " + RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", "Missing Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    return false;
+                }
+                else if(!File.Exists(strCmd))
+                {
+                    System.Windows.MessageBox.Show("WaVector executable does not exist.  Please enter the WaVector executable path in the file.  " + RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", "Incorrect Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    return false;
+                }
+                else
+                {
+                    // Execute command
+                    string strCmdText = RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorSelectedFiles.txt";
+                    System.Diagnostics.Process.Start(strCmd, strCmdText);
+                    return true;
+                }
+            }
+            else
+            {
+                string oldPath = @"C:\Program Files\WaveForce Technologies\Wavector\application\Wavector.exe";
+                string newPath_6_3 = @"C:\Program Files (x86)\WaveForce Technologies\Wavector\Wavector_6_3.exe";
+
+                if (File.Exists(oldPath))
+                {
+                    // File does not exist so create a blank file
+                    using (StreamWriter sw = new StreamWriter(RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", false))
+                    {
+                        // Just create the file, write the default path and close it
+                        sw.Write(oldPath);
+                    }
+
+                    // Retry finding the file and passing the data
+                    if (!RunWavector())
+                    {
+                        // Give a warning
+                        System.Windows.MessageBox.Show("WaVector executable path file does not exist at: " + RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorExe.txt.  A blank file will be created.  Please enter the WaVector executable path in the file.", "Missing Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                        return false;
+                    }
+                }
+                else if (File.Exists(newPath_6_3))
+                {
+                    // File does not exist so create a blank file
+                    using (StreamWriter sw = new StreamWriter(RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", false))
+                    {
+                        // Just create the file, write the default path and close it
+                        sw.Write(newPath_6_3);
+                    }
+
+                    // Retry finding the file and passing the data
+                    if (!RunWavector())
+                    {
+                        // Give a warning
+                        System.Windows.MessageBox.Show("WaVector executable path file does not exist at: " + RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorExe.txt.  A blank file will be created.  Please enter the WaVector executable path in the file.", "Missing Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Give a warning
+                    System.Windows.MessageBox.Show("Wavector is not found installed on your computer.\nPlease install Wavector, then update the WaVector executable path in the file: " + RTI.Pulse.Commons.GetAppStorageDir() + @"\WaVectorExe.txt.\n  A blank file will be created.  Please enter the WaVector executable path in the file.", "Missing Exe Path", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+
+                    // File does not exist so create a blank file
+                    using (StreamWriter sw = new StreamWriter(RTI.Pulse_Waves.Commons.GetAppStorageDir() + @"\WaVectorExe.txt", false))
+                    {
+                        // Just create the file and close it
+                        sw.Write("");
+                    }
+
+                    return false;
+                }
+
+            }
+            return true;
         }
 
     }

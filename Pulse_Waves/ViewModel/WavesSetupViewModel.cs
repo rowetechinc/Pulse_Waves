@@ -30,6 +30,7 @@
  * 02/19/2015      RC          0.0.2       Added button flags to set the color of the button when pressed.
  * 11/03/2015      RC          1.0.0       Added UpdateCEI() to update all the CEI commands for each VM.
  * 05/28/2016      RC          1.1.5       Added CSAVE to SetCETFPtoAdcp().
+ * 10/23/2017      RC          1.2.2       Update the Prediction model on startup.
  * 
  */
 
@@ -963,6 +964,9 @@ namespace RTI
             {
                 SubsystemConfigList.Add(new WavesSubsystemConfigurationViewModel(ref configs[x], this));
             }
+
+            // Update the deployment duration for all the VM
+            UpdateDeploymentDuration();
 
             // Create the Subsystem List
             ListOfSubsystems = new SubsystemList();

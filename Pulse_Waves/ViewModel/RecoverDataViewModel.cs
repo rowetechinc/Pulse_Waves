@@ -53,6 +53,7 @@ namespace RTI
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using System.Linq;
+    using System.Diagnostics;
 
     /// <summary>
     /// Download data from the ADCP through the serial port.
@@ -1395,8 +1396,16 @@ namespace RTI
                 // Get the files selected
                 string[] files = dialog.FileNames;
 
-                // Import the files
-                Task.Run(() => ImportBinaryFiles(files));
+                try
+                {
+                    // Import the files
+                    Task.Run(() => ImportBinaryFiles(files));
+                }
+                catch(Exception e)
+                {
+                    log.Error("Error processing binary file.", e);
+                    Debug.WriteLine(e);
+                }
             }
         }
 
@@ -1466,9 +1475,9 @@ namespace RTI
                     var list = codec.GetEnsembles(filePath);
 
                     // Add the ensembles to the waves encoder 
-                    foreach(var ens in list)
+                    for(int x = 0; x < list.Count; x++)
                     {
-                        AddEnsemble(ens.RawEnsemble, ens.Ensemble);
+                        AddEnsemble(list[x].RawEnsemble, list[x].Ensemble);
                     }
 
                     // Cleanup the data in the encoder

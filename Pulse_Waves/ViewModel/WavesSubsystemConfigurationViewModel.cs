@@ -31,6 +31,7 @@
  * 06/07/2016      RC          1.1.6       Fixed bug with prediction models for subsystem being out of sync with main prediciton model.
  *                                         Fixed bug where CWPP was 1 but CWPTBP had a value.
  * 04/11/2017      RC          1.1.8       Set CWPTBP automatically based off CEI and number of pings.
+ * 10/23/2017      RC          1.2.1       Updated the Prediction model on startup.  Fixed bug with not passing BurstInterval to prediction model.
  */
 
 using ReactiveUI;
@@ -157,6 +158,10 @@ namespace RTI
             {
                  AdcpSubConfig.Commands.CBI_BurstInterval = new RTI.Commands.TimeValue(value);
 
+                // Update predictor
+                _PredictionModelInput.CBI_BurstInterval = value;
+                UpdatePredictionModel();
+
                 // Update the display
                 _wavesSetupVM.UpdateCommandSet();
 
@@ -202,6 +207,10 @@ namespace RTI
             set
             {
                 AdcpSubConfig.Commands.CBI_NumEnsembles = value;
+
+                // Update predictor
+                _PredictionModelInput.CBI_SamplesPerBurst = value;
+                UpdatePredictionModel();
 
                 // Update the display
                 _wavesSetupVM.UpdateCommandSet();
@@ -957,10 +966,15 @@ namespace RTI
                 CEI = CEI,
                 CWPTBP = CWPTBP,
                 CBI_BurstInterval = (float)AdcpSubConfig.Commands.CBI_BurstInterval.ToSecondsD(),
+                CBI_SamplesPerBurst = AdcpSubConfig.Commands.CBI_NumEnsembles,
                 CBI_IsInterleaved = AdcpSubConfig.Commands.CBI_BurstPairFlag,
                 CWPON = AdcpSubConfig.Commands.CWPON,
                 CWPBB_TransmitPulseType = AdcpSubConfig.Commands.CWPBB_TransmitPulseType
+                
             };
+
+            UpdatePredictionModel();
+            _wavesSetupVM.UpdateCommandSet();
         }
 
         /// <summary>
