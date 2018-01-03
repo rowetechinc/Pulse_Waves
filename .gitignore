@@ -7,3 +7,4 @@ Log/
 log/
 *.db
 packages/
+Pulse_Waves/Installer/*.exe
