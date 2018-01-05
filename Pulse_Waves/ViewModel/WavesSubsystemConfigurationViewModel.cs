@@ -942,7 +942,7 @@ namespace RTI
             // If a vertical beam, turn on Range Tracking
             if(Subsystem.IsVerticalBeam(AdcpSubConfig.SubsystemConfig.SubSystem.Code))
             {
-                RangeTrackingMode = RangeTrackingModeBin;
+                RangeTrackingMode = RangeTrackingModePressure;                              // Default to use Pressure
             }
 
             // Default for a waves system

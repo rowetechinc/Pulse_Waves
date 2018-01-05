@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	;Name and file
 	Name "Rowe Technology Inc. - Pulse Waves"
-	OutFile "Pulse.Waves.Installer.v.1.3.0.Full.exe"
+	OutFile "Pulse.Waves.Installer.v.1.3.1.Full.exe"
 
 	;Default installation folder
 	InstallDir "$PROGRAMFILES\Rowe Technology Inc\Pulse Waves"
@@ -74,7 +74,7 @@ Var /GLOBAL VERSION_MINOR
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Section "Core" SecCore
 
-	StrCpy $VERSION_NUM "1.3.0" 
+	StrCpy $VERSION_NUM "1.3.1" 
 	StrCpy $VERSION_MAJOR "1"
 	StrCpy $VERSION_MINOR "3"
 
