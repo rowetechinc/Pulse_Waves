@@ -1,5 +1,8 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.3.2
+ - Add absorption into prediction model.
+
 Pulse_Waves-1.3.1
  - Change default RangeTracking to Pressure.
 

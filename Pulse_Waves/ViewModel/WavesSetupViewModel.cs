@@ -31,6 +31,7 @@
  * 11/03/2015      RC          1.0.0       Added UpdateCEI() to update all the CEI commands for each VM.
  * 05/28/2016      RC          1.1.5       Added CSAVE to SetCETFPtoAdcp().
  * 10/23/2017      RC          1.2.2       Update the Prediction model on startup.
+ * 01/12/2018      RC          1.3.2       Add absorption into prediction model.
  * 
  */
 
@@ -361,6 +362,9 @@ namespace RTI
 
                 // Update the command set.
                 UpdateCommandSet();
+
+                // Update Prediction Model
+                UpdateXdcrDepth();
             }
         }
 
@@ -399,6 +403,9 @@ namespace RTI
 
                 // Update the command set.
                 UpdateCommandSet();
+
+                // Update Prediction Model
+                UpdateSalinity();
             }
         }
 
@@ -437,6 +444,9 @@ namespace RTI
 
                 // Update the command set.
                 UpdateCommandSet();
+
+                // Update Prediction Model
+                UpdateTemperature();
             }
         }
 
@@ -1727,6 +1737,8 @@ public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel 
 
         #region Prediction Model
 
+        #region Deployment Duration
+
         /// <summary>
         /// Update the deployment duration to
         /// the VM predictors.
@@ -1742,6 +1754,71 @@ public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel 
             // Update the prediction model
             UpdatePrediction();
         }
+
+        #endregion
+
+        #region Temperature
+
+        /// <summary>
+        /// Update the deployment duration to
+        /// the VM predictors.
+        /// </summary>
+        private void UpdateTemperature()
+        {
+            // Update the VM
+            foreach (var vm in SubsystemConfigList)
+            {
+                vm._PredictionModelInput.Temperature = CWT;
+                vm.UpdatePredictionModel();
+            }
+
+            // Update the prediction model
+            UpdatePrediction();
+        }
+
+        #endregion
+
+        #region Salinity
+
+        /// <summary>
+        /// Update the deployment duration to
+        /// the VM predictors.
+        /// </summary>
+        private void UpdateSalinity()
+        {
+            // Update the VM
+            foreach (var vm in SubsystemConfigList)
+            {
+                vm._PredictionModelInput.Salinity = CWS;
+                vm.UpdatePredictionModel();
+            }
+
+            // Update the prediction model
+            UpdatePrediction();
+        }
+
+        #endregion
+
+        #region XDCR Depth
+
+        /// <summary>
+        /// Update the deployment duration to
+        /// the VM predictors.
+        /// </summary>
+        private void UpdateXdcrDepth()
+        {
+            // Update the VM
+            foreach (var vm in SubsystemConfigList)
+            {
+                vm._PredictionModelInput.XdcrDepth = SPOS_WaterDepth;
+                vm.UpdatePredictionModel();
+            }
+
+            // Update the prediction model
+            UpdatePrediction();
+        }
+
+        #endregion
 
         /// <summary>
         /// Update with the latest prediction model values
@@ -1791,6 +1868,8 @@ public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel 
             this.NotifyOfPropertyChange(() => this.PredictedMemoryUsage);
             this.NotifyOfPropertyChange(() => this.PredictedNumberOfBatteries);
         }
+
+
 
         #endregion
 

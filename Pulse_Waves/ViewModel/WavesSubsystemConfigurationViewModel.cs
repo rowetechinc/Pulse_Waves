@@ -32,6 +32,7 @@
  *                                         Fixed bug where CWPP was 1 but CWPTBP had a value.
  * 04/11/2017      RC          1.1.8       Set CWPTBP automatically based off CEI and number of pings.
  * 10/23/2017      RC          1.2.1       Updated the Prediction model on startup.  Fixed bug with not passing BurstInterval to prediction model.
+ * 01/12/2018      RC          1.3.2       Add absorption into prediction model.
  */
 
 using ReactiveUI;
@@ -969,8 +970,10 @@ namespace RTI
                 CBI_SamplesPerBurst = AdcpSubConfig.Commands.CBI_NumEnsembles,
                 CBI_IsInterleaved = AdcpSubConfig.Commands.CBI_BurstPairFlag,
                 CWPON = AdcpSubConfig.Commands.CWPON,
-                CWPBB_TransmitPulseType = AdcpSubConfig.Commands.CWPBB_TransmitPulseType
-                
+                CWPBB_TransmitPulseType = AdcpSubConfig.Commands.CWPBB_TransmitPulseType,
+                Temperature = _wavesSetupVM.CWT,
+                Salinity = _wavesSetupVM.CWS,
+                XdcrDepth = _wavesSetupVM.SPOS_WaterDepth
             };
 
             UpdatePredictionModel();
@@ -1008,7 +1011,7 @@ namespace RTI
         /// <summary>
         /// Update the Prediction model displays.
         /// </summary>
-        private void UpdatePredictionModel()
+        public void UpdatePredictionModel()
         {
            
                 // Output the strings
