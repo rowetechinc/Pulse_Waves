@@ -1,5 +1,9 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.3.3
+ - Updated Prediction Model System Init Time to 2.6.
+ - Updated Prediction Model range table.
+
 Pulse_Waves-1.3.2
  - Add absorption into prediction model.
 
