@@ -1,0 +1,48 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Version 1.4.0 ChangeLog</title>
+		<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+	</head>
+	<body>
+        <p>
+            <br /><span class="auto-style1">Pulse Waves-1.4.0</span>
+            <br />   Pulse Waves-1.4.0
+            <br />    - Redesigned the Setup page to use a tab.
+            <br />    - Updated the Prediction Model for power usage.
+            <br />    - Added AutoUpdater when you click About.
+            <br />
+            <br /><span class="auto-style1">RTI-3.4.4</span>
+            <br />   RTI-3.4.4
+            <br />   - In InstrumentVelocityDataSet and EarthVelocityDataSet, if no Water Profile, fix bug IsBinGood() to check if the bin is good.
+            <br />   - In Subsystem, added GetBeamAngle() to give the beam angle for a given subsystem.
+            <br />   - In Transform, get the correct Beam Angle based off the subsystem code.
+            <br />   - In Subsystem, added new Subsystem codes.
+            <br />   - In AdcpCodec, pass the original data format when the data is sent based off the codec used.
+            <br />   - In Transform, know the original data format to know which beam matrix to use to transform the data.
+            <br />   - In AdcpDvlCodecReadFile, AdcpBinaryCodecReadFile, AdcpPd0CodecReadFile, added original data format.
+            <br />   - In IPlayback, added GetOrigDataFormat() to know the what format the data was recorded.
+            <br />   - In FilePlayback and ProjectPlayback, pass the data format the data was recorded.
+            <br />   - Added EnsExporterWriter.
+            <br />   - Fixed bug in Pd6_13Codec where _buffer was not initialized and threw an exception.
+            <br />   - Fixed bug in DvlCodec where _buffer was not initialized and threw an exception.
+            <br />
+            <br />   RTI-3.4.3
+            <br />   - Fixed bug by adding a line feed to the end EnsToPd6_13Codec.
+            <br />   - Made the spacing for the PD6 data match the documentation.
+            <br />   - In RemoveShipSpeed, added GetPreviousBottomTrackVelocity() to get the previous Bottom Track velocity to store for next iteration.
+            <br />   - In ShipVelocityDataSet, added VelocityVectors.
+            <br />   - In VelocityVector, added GenerateShipVectors().
+            <br />   - Added AdcpUdp.
+            <br />   - In BottomTrackDataSet, fixed bug if no beams in data.
+            <br />   - In RemoveShipSpeed, check if Bottom Track has no beams.
+            <br />   - In PD4_5Codec, fixed a bug where the thread lock holds in SearchForHeaderStart().
+            <br />   - In SerialNumber, added option to add new line in GetSerialNumberDescString().
+            <br />
+        </p>
+	</body>
+</html>

@@ -5,12 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="530" d:DesignWidth="800"
+             d:DesignHeight="550" d:DesignWidth="800"
 	        Foreground="{StaticResource PulseFontColor}">
     
-    <Border Background="{StaticResource PulseBackBorder3Color}" Margin="5" >
-        <StackPanel>
-            <Grid>
+    <Border Background="{StaticResource PulseBackBorder3Color}" Margin="5" HorizontalAlignment="Left" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0">
                 <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Waves Subsystem Setup" Margin="5" />
             
                     <!--Remove Button-->
@@ -23,9 +30,9 @@
                 </Button>
             </Grid>
 
-            <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontColor}" Text="{Binding Path=Desc}" Margin="5,2,5,5" />
-            
-            <StackPanel Orientation="Horizontal">
+            <TextBlock Grid.Row="1" FontWeight="Bold" Foreground="{StaticResource PulseFontColor}" Text="{Binding Path=Desc}" Margin="5,2,5,5" />
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
 
                 <!--Profile-->
                 <Border Background="{StaticResource PulseBackBorder2Color}" Margin="5">
@@ -230,8 +237,8 @@
             </StackPanel>
 
             <!--Prediction Model-->
-            <Border Background="{StaticResource PulseBackBorder2Color}" Margin="5" >
-                <StackPanel>
+            <Border Grid.Row="3" Background="{StaticResource PulseBackBorder2Color}" Margin="5" >
+                <StackPanel Margin="5">
                     <TextBlock Text="Prediction Model" Foreground="{StaticResource PulseFontBrightColor}" Margin="5" />
                 
                     <!--Max Vel-->
@@ -267,6 +274,6 @@
                 </StackPanel>
             </Border>
 
-        </StackPanel>
+        </Grid>
     </Border>
 </UserControl>

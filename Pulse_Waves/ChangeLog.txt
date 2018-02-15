@@ -1,5 +1,10 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.4.0
+ - Redesigned the Setup page to use a tab.
+ - Updated the Prediction Model for power usage.
+ - Added AutoUpdater when you click About.
+
 Pulse_Waves-1.3.3
  - Updated Prediction Model System Init Time to 2.6.
  - Updated Prediction Model range table.

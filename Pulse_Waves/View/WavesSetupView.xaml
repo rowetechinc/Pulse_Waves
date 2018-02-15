@@ -15,7 +15,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -282,15 +282,23 @@
 
             <!--DVL Setup-->
             <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Background="{StaticResource PulseBackBorder2Color}" CornerRadius="5" Margin="5">
-                <StackPanel >
-                    <TextBlock FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Waves Setup" Margin="5" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" FontWeight="Bold" Foreground="{StaticResource PulseFontHighlightColor}" Text="Waves Setup" Margin="5" />
 
                     <!--Hardware Connection-->
-                    <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                    <Border Grid.Row="1" Background="{StaticResource PulseBackBorder1Color}" Margin="5">
                         <TextBlock Text="{Binding Path=HardwareConnection}" Margin="10,5" />
                     </Border>
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
                         <!--Read the ADCP-->
                         <Button Content="Read Commands"  Margin="5" Command="{Binding Path=ReadAdcpCommand}"  />
                         
@@ -305,8 +313,8 @@
                             </StackPanel>
                         </Border>
                     </StackPanel>
-                    
-                    <StackPanel Orientation="Horizontal">
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal">
                         <!--Hardware-->
                         <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
                             <StackPanel>
@@ -434,54 +442,43 @@
 
 
                     <!--Subsystem-->
-                    <Border Background="{StaticResource PulseBackBorder1Color}" Margin="5">
-                        <StackPanel Orientation="Horizontal">
+                    <Border Grid.Row="4" Background="{StaticResource PulseBackBorder1Color}" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                            <StackPanel>
+                            <StackPanel Grid.Column="0">
                                 <TextBlock Text="Subsystems" Foreground="{StaticResource PulseFontBrightColor}" Margin="5"  FontWeight="Bold"/>
                                 <ComboBox Width="90" ItemsSource="{Binding Path=ListOfSubsystems}" SelectedItem="{Binding Path=SelectedSubsystem}" Margin="5" />
                                 <Button Content="Add Subsystem" Margin="5" Command="{Binding Path=AddSubsystemCommand}" />
                             </StackPanel>
 
-                            <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Auto" MaxWidth="730" MaxHeight="600" >
+                            <ScrollViewer Grid.Column="1" >
                                 <!--Subsystem Configurations-->
                                 <Grid Margin="5">
-                                    <ListBox ItemsSource="{Binding SubsystemConfigList}">
-                                        <ListBox.ItemTemplate>
+                                    <TabControl ItemsSource="{Binding SubsystemConfigList}" SelectedIndex="{Binding SelectedIndex}" >
+                                        <TabControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{StaticResource PulseBackBorder2Color}">
+                                                    <TextBlock Text="{Binding Path=TabDesc}" Margin="5,0,5,5" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </TabControl.ItemTemplate>
+                                        <TabControl.ContentTemplate>
                                             <DataTemplate>
                                                 <ContentControl cal:View.Model="{Binding}" />
                                             </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                        <!--Change to horizontal items-->
-                                        <!--ListBox.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel IsItemsHost="True" />
-                                            </ItemsPanelTemplate>
-                                        </-->
-                                        <!--Change the hightlight colors-->
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsSelected" Value="True" >
-                                                        <!--Setter Property="FontWeight" Value="Bold" /-->
-                                                        <Setter Property="Background" Value="Transparent" />
-                                                        <Setter Property="Foreground" Value="Black" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                                <Style.Resources>
-                                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-                                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                                                </Style.Resources>
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-                                    </ListBox>
+                                        </TabControl.ContentTemplate>
+                                    </TabControl>
                                 </Grid>
                             </ScrollViewer>
 
-                        </StackPanel>
+                        </Grid>
                     </Border>
 
-                </StackPanel>
+                </Grid>
             </Border>
 
 

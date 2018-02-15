@@ -97,6 +97,23 @@ namespace RTI
             }
         }
 
+        /// <summary>
+        /// String of the tab description of subsystem configuration.
+        /// </summary>
+        private string _TabDesc;
+        /// <summary>
+        /// String of the tab description of subsystem configuration.
+        /// </summary>
+        public string TabDesc
+        {
+            get { return _TabDesc; }
+            set
+            {
+                _TabDesc = value;
+                this.NotifyOfPropertyChange(() => this.TabDesc);
+            }
+        }
+
         #region CBI
 
         /// <summary>
@@ -879,6 +896,7 @@ namespace RTI
             _wavesSetupVM = wavesSetupVM;
             AdcpSubConfig = config;
             Desc = config.ToString();
+            TabDesc = config.SubsystemConfig.IndexCodeString();
 
             Init();
 
@@ -921,6 +939,7 @@ namespace RTI
             CWPP = AdcpSubConfig.Commands.CWPP;
             CWPTBP = AdcpSubConfig.Commands.CWPTBP;
             CWPBB_LagLength = AdcpSubConfig.Commands.CWPBB_LagLength;
+            CBTON = AdcpSubConfig.Commands.CBTON;
             CBI_BurstInterval = (float)AdcpSubConfig.Commands.CBI_BurstInterval.ToSecondsD();
             CBI_NumEnsembles = AdcpSubConfig.Commands.CBI_NumEnsembles;
             CBI_Interleaved = AdcpSubConfig.Commands.CBI_BurstPairFlag;
@@ -969,6 +988,7 @@ namespace RTI
                 CBI_BurstInterval = (float)AdcpSubConfig.Commands.CBI_BurstInterval.ToSecondsD(),
                 CBI_SamplesPerBurst = AdcpSubConfig.Commands.CBI_NumEnsembles,
                 CBI_IsInterleaved = AdcpSubConfig.Commands.CBI_BurstPairFlag,
+                CBTON = AdcpSubConfig.Commands.CBTON,
                 CWPON = AdcpSubConfig.Commands.CWPON,
                 CWPBB_TransmitPulseType = AdcpSubConfig.Commands.CWPBB_TransmitPulseType,
                 Temperature = _wavesSetupVM.CWT,

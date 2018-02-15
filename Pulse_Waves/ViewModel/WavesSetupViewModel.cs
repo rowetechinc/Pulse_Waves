@@ -106,6 +106,23 @@ namespace RTI
             }
         }
 
+        /// <summary>
+        /// Selected index.
+        /// </summary>
+        private int _SelectedIndex;
+        /// <summary>
+        /// Selected index.
+        /// </summary>
+        public int SelectedIndex
+        {
+            get { return _SelectedIndex; }
+            set
+            {
+                _SelectedIndex = value;
+                this.NotifyOfPropertyChange(() => this.SelectedIndex);
+            }
+        }
+
         #endregion
 
         #region ADCP Configuration
@@ -959,6 +976,7 @@ namespace RTI
             _pm = IoC.Get<PulseManager>();
 
             SubsystemConfigList = new ReactiveList<WavesSubsystemConfigurationViewModel>();
+            SelectedIndex = 0;
 
             _AdcpCommandHistory = new ObservableCollection<string>();
 
@@ -1649,6 +1667,9 @@ namespace RTI
             {
                 // Add config
                 AddConfiguration(_selectedSubsystem.Code);
+
+                // Set the tab selection
+                SelectedIndex = SubsystemConfigList.Count() - 1;
             }
         }
 
