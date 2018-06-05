@@ -586,46 +586,49 @@ namespace RTI
                 int JDN = rtitime_JulianDayNumber(year, month, day);
                 var timeStampSeconds = 24.0 * 3600.0 * JDN + 3600.0 * hour + 60.0 * minute + second + hsec / 100.0;
 
-                // If first record, set the string for date and time and serial number
-                if (WavesRecords.Last().WaveSamples.Count == 0)
+                if (WavesRecords.Count > 0)
                 {
-                    // Set the date and time
-                    WavesRecords.Last().DateStr = year.ToString("D04") + "/"
-                                 + month.ToString("D02") + "/"
-                                 + day.ToString("D02") + " "
-                                 + hour.ToString("D02") + ":"
-                                 + minute.ToString("D02") + ":"
-                                 + second.ToString("D02") + "."
-                                 + hsec.ToString("D02");
+                    // If first record, set the string for date and time and serial number
+                    if (WavesRecords.Last().WaveSamples.Count == 0)
+                    {
+                        // Set the date and time
+                        WavesRecords.Last().DateStr = year.ToString("D04") + "/"
+                                     + month.ToString("D02") + "/"
+                                     + day.ToString("D02") + " "
+                                     + hour.ToString("D02") + ":"
+                                     + minute.ToString("D02") + ":"
+                                     + second.ToString("D02") + "."
+                                     + hsec.ToString("D02");
 
-                    // Set the serial number string
-                    WavesRecords.Last().SnStr = ens.EnsembleData.SysSerialNumber.ToString();
+                        // Set the serial number string
+                        WavesRecords.Last().SnStr = ens.EnsembleData.SysSerialNumber.ToString();
 
-                    double FirstSampleTime = timeStampSeconds;                                       // Get the first time stamp
+                        double FirstSampleTime = timeStampSeconds;                                       // Get the first time stamp
 
-                    FirstSampleTime /= (24.0 * 3600.0);                                                     // Convert to days                
-                    FirstSampleTime -= 1721059.0;                                                           // Adjust for matlab serial date numbers
-                    FirstSampleTime += 0.000011574;
-                    WavesRecords.Last().FirstSampleTime = FirstSampleTime;                                  // Set the first sample time for the waves record
+                        FirstSampleTime /= (24.0 * 3600.0);                                                     // Convert to days                
+                        FirstSampleTime -= 1721059.0;                                                           // Adjust for matlab serial date numbers
+                        FirstSampleTime += 0.000011574;
+                        WavesRecords.Last().FirstSampleTime = FirstSampleTime;                                  // Set the first sample time for the waves record
+                    }
+
+                    #endregion
+
+                    #region Latitude, Longitude and Pressure Sensor Height
+
+
+                    if (ens.IsNmeaAvail && ens.NmeaData.IsGpggaAvail())
+                    {
+                        WavesRecords.Last().Latitude = ens.NmeaData.GPGGA.Position.Latitude.DecimalDegrees;
+                        WavesRecords.Last().Longitude = ens.NmeaData.GPGGA.Position.Longitude.DecimalDegrees;
+                    }
+                    else
+                    {
+                        WavesRecords.Last().Latitude = options.Latitude;
+                        WavesRecords.Last().Longitude = options.Longitude;
+                    }
+
+                    WavesRecords.Last().PressureSensorHeight = options.PressureSensorHeight;
                 }
-
-                #endregion
-
-                #region Latitude, Longitude and Pressure Sensor Height
-
-
-                if (ens.IsNmeaAvail && ens.NmeaData.IsGpggaAvail())
-                {
-                    WavesRecords.Last().Latitude = ens.NmeaData.GPGGA.Position.Latitude.DecimalDegrees;
-                    WavesRecords.Last().Longitude = ens.NmeaData.GPGGA.Position.Longitude.DecimalDegrees;
-                }
-                else
-                {
-                    WavesRecords.Last().Latitude = options.Latitude;
-                    WavesRecords.Last().Longitude = options.Longitude;
-                }
-
-                WavesRecords.Last().PressureSensorHeight = options.PressureSensorHeight;
 
                 #endregion
 

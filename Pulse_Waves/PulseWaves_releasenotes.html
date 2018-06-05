@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<title>Version 1.4.0 ChangeLog</title>
+		<title>Version 1.5.0 ChangeLog</title>
 		<style type="text/css">
 .auto-style1 {
 	text-decoration: underline;
@@ -10,13 +10,36 @@
 	</head>
 	<body>
         <p>
-            <br /><span class="auto-style1">Pulse Waves-1.4.0</span>
+            <br /><span class="auto-style1">Pulse Waves-1.5.0</span>
+            <br />  Pulse Waves-1.5.0
+            <br />   * Fixed a bug with DecodeCSHOW for CWPRT and CBI.
+            <br />   * Updated Prediction Model System Init Time.
+            <br />
             <br />   Pulse Waves-1.4.0
             <br />    - Redesigned the Setup page to use a tab.
             <br />    - Updated the Prediction Model for power usage.
             <br />    - Added AutoUpdater when you click About.
             <br />
-            <br /><span class="auto-style1">RTI-3.4.4</span>
+            <br /><span class="auto-style1">RTI-3.4.7</span>
+            <br />   RTI-3.4.7
+            <br />   * Fixed bug in DecodeCSHOW with DecodeCWPRT and only 2 parameters.
+            <br />   * In AdcpSubsystemCommand, increased the number of paramater for CBI from 2 to 3. AdcpSubsystemCommands.CBI_NUM_PARAM
+            <br />   * Fixed bug in DecodeCSHOW with DecodeCBI() and added the interleave flag.
+            <br />
+            <br />   RTI-3.4.6
+            <br />   * Changed DilutionOfPrecision to not throw an exception but pass NaN.
+            <br />   * Added CBTON and CBI to deployment command list.
+            <br />
+            <br />   RTI-3.4.5
+            <br />   - Added Previous BT Range to ScreenMarkBadBelowBottom.
+            <br />   - In BottomTrackDataSet, DvlDataSet and AncillaryDataSet, added IsUpwardFacing() to know the direction the ADCP is facing.
+            <br />   - In AncillaryDataSet, added BinToDepth().
+            <br />   - In AdcpCodec, clear the buffer if the format is not being used.
+            <br />   - In Pd4_5Codec, lock the headerStart when clearing the codec.
+            <br />   - In PD4_5Codec, made it match PD0 style.
+            <br />   - In Ensemble added FileName.
+            <br />   - In NmeaDataSet, check for exceptions in SetValue() and SetNmeaStringArray().
+            <br />   - In SerialOptions, added 57600 baud rate.
             <br />   RTI-3.4.4
             <br />   - In InstrumentVelocityDataSet and EarthVelocityDataSet, if no Water Profile, fix bug IsBinGood() to check if the bin is good.
             <br />   - In Subsystem, added GetBeamAngle() to give the beam angle for a given subsystem.

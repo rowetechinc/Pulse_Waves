@@ -1699,10 +1699,10 @@ namespace RTI
                 }
             }*/
 
-///<summary>
-///Called by a specific subsystem to see if it is connected to any other subsystems
-/// </summary>
-public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel wvm)
+        ///<summary>
+        ///Called by a specific subsystem to see if it is connected to any other subsystems
+        /// </summary>
+        public string setUpBurstInterleavedWarning(WavesSubsystemConfigurationViewModel wvm)
         {
             string subsystemNumber = "";
             

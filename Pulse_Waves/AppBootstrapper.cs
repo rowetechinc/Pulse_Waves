@@ -124,6 +124,9 @@ namespace RTI
 
             // Singleton AveragingBaseViewModel
             ContainerExtensions.Singleton<AveragingBaseViewModel, AveragingBaseViewModel>(container);
+
+            // Singleton DataFormatViewModel
+            ContainerExtensions.Singleton<DataFormatViewModel, DataFormatViewModel>(container);
         }
 
         /// <summary>

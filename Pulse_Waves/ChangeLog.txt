@@ -1,5 +1,9 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.5.0
+ * Fixed a bug with DecodeCSHOW for CWPRT and CBI.
+ * Updated Prediction Model System Init Time.
+
 Pulse_Waves-1.4.0
  - Redesigned the Setup page to use a tab.
  - Updated the Prediction Model for power usage.

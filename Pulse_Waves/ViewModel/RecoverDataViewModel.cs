@@ -1431,33 +1431,6 @@ namespace RTI
                 // Open the file
                 if (File.Exists(filePath))
                 {
-                    //using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                    //{
-                    //    if (fileStream.CanRead)
-                    //    {
-                    //        using (BufferedStream bs = new BufferedStream(fileStream))
-                    //        {
-                    //            // Get the file size
-                    //            long fileSize = fileStream.Length;
-
-                    //            // Read in the file
-                    //            byte[] buffer = new byte[fileSize];
-                    //            var count = await bs.ReadAsync(buffer, 0, (int)fileSize);
-
-                    //            // Set the file name
-                    //            string fileName = Path.GetFileName(filePath);
-                    //            fileName = fileName.Replace('B', 'W');                              // Replace B with W
-                    //            _fileName = fileName.Replace(Path.GetExtension(filePath), ".mat");  // Replace the file extension with .mat
-
-                    //            // Add buffer to the codecs
-                    //            //_adcpCodec.AddIncomingData(buffer);
-
-                    //            // Wait for file complete
-                    //            //_eventWaitData.WaitOne();
-                    //        }
-                    //    }
-                    //}
-
                     // Set the file name
                     string fileName = Path.GetFileName(filePath);
                     if (fileName.Contains('B'))

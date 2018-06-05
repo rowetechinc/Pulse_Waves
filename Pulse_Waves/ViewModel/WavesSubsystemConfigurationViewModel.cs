@@ -904,7 +904,7 @@ namespace RTI
             RemoveSubsystemCommand = ReactiveCommand.Create();
             RemoveSubsystemCommand.Subscribe(_ => RemoveSubsystem());
 
-            CBI_Interleaved = false;
+            //CBI_Interleaved = false;
         }
 
         /// <summary>
@@ -1137,9 +1137,12 @@ namespace RTI
         /// <param name="flag">Flag if burst mode or not.</param>
         public void UpdateBurstModeInterleaved(bool flag)
         {
+            // Update the configuration
             AdcpSubConfig.Commands.CBI_BurstPairFlag = flag;
-            this.NotifyOfPropertyChange(() => this.CBI_Interleaved);
+
+            // Update the prediction model
             _PredictionModelInput.CBI_IsInterleaved = flag;
+
             // Update the display
             _wavesSetupVM.UpdateCommandSet();
             
@@ -1163,7 +1166,10 @@ namespace RTI
                     CBI_InterleavedMessage = "Subsystem " + Desc.Substring(1, 1) + " is Interleaved with subsystem " + nextSubsystemNumber;
                 }
             }
-            if (CBI_Interleaved == false) CBI_InterleavedMessage = "";
+            if (CBI_Interleaved == false)
+            {
+                CBI_InterleavedMessage = "";
+            }
             
     }
 
