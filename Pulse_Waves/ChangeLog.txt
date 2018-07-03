@@ -1,5 +1,8 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.5.1
+ * Updated Prediction Model for Absorption, and Narrowband calculations.
+
 Pulse_Waves-1.5.0
  * Fixed a bug with DecodeCSHOW for CWPRT and CBI.
  * Updated Prediction Model System Init Time.

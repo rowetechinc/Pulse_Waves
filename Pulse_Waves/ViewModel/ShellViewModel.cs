@@ -420,7 +420,7 @@ namespace RTI
                                 MessageBoxImage.Information);
                     }
 
-                    if (dialogResult.Equals(MessageBoxResult.Yes))
+                    if (dialogResult.Equals(MessageBoxResult.OK) || dialogResult.Equals(MessageBoxResult.Yes))
                     {
                         try
                         {
