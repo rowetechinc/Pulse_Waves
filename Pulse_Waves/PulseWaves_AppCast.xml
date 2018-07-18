@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <item>
-  <title>New version 1.5.1 of Pulse Waves is available.</title>
-  <version>1.5.1</version>
-  <url>http://www.rowetechinc.co/pulse/Pulse.Waves.Installer.v.1.5.1.Full.exe</url>
+  <title>New version 1.5.2 of Pulse Waves is available.</title>
+  <version>1.5.2</version>
+  <url>http://www.rowetechinc.co/pulse/Pulse.Waves.Installer.v.1.5.2.Full.exe</url>
   <changelog>http://www.rowetechinc.co/pulse/PulseWaves_releasenotes.html</changelog>
   <mandatory>true</mandatory>
 </item>

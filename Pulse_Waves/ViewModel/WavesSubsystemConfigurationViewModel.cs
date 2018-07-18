@@ -1120,7 +1120,7 @@ namespace RTI
             {
                 CBI_NumEnsembles = 4096;
                 CBI_BurstInterval = 3600;
-                CBI_Interleaved = true;
+                CBI_Interleaved = false;
                 CEI = 0.4f;
             }
 
