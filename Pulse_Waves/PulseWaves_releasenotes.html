@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<title>Version 1.5.2 ChangeLog</title>
+		<title>Version 1.6.0 ChangeLog</title>
 		<style type="text/css">
 .auto-style1 {
 	text-decoration: underline;
@@ -10,7 +10,11 @@
 	</head>
 	<body>
         <p>
-            <br /><span class="auto-style1">Pulse Waves-1.5.2</span>
+            <br /><span class="auto-style1">Pulse Waves-1.6.0</span>
+            <br />  Pulse_Waves-1.6.0
+            <br />  * In WavesSubsystemConfigurationViewModel, if CBI is disabled, then make a zero CBI command.
+            <br />  * In WavesSetupViewModel, fix deployment duration for multiple configurations.
+            <br />
             <br />  Pulse_Waves-1.5.2
             <br />  * Changed the CepoIndex in the command to a Hex value.
             <br />
@@ -29,6 +33,10 @@
             <br /><span class="auto-style1">RTI-3.4.8</span>
             <br />   RTI-3.4.8
             <br />   * In AdcpSubsystemCommands, changed the CepoIndex in the command to a Hex value.
+            <br />   - Added PD0NmeaData.
+            <br />   - Export PD0 NMEA data.
+            <br />   * In AdcpDatabaseWriter, put a try/catch in Dispose if the writer is closed while still writing.
+            <br />   * In AdcpSubsystemCommands, add CBI to all the command list.
             <br />
             <br />   RTI-3.4.7
             <br />   * Fixed bug in DecodeCSHOW with DecodeCWPRT and only 2 parameters.

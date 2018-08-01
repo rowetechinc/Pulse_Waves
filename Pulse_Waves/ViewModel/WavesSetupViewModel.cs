@@ -32,6 +32,7 @@
  * 05/28/2016      RC          1.1.5       Added CSAVE to SetCETFPtoAdcp().
  * 10/23/2017      RC          1.2.2       Update the Prediction model on startup.
  * 01/12/2018      RC          1.3.2       Add absorption into prediction model.
+ * 08/01/2018      RC          1.6.0       Fix deployment duration for multiple configurations.
  * 
  */
 
@@ -647,11 +648,11 @@ namespace RTI
         /// <summary>
         /// Deployment Duration.
         /// </summary>
-        private UInt32 _DeploymentDuration;
+        private double _DeploymentDuration;
         /// <summary>
         /// Deployment Duration.
         /// </summary>
-        public UInt32 DeploymentDuration
+        public double DeploymentDuration
         {
             get { return _DeploymentDuration; }
             set
@@ -1296,8 +1297,15 @@ namespace RTI
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(new System.Action(() =>
                 {
+                    // Divide the days between all the configurations
+                    double duration = DeploymentDuration;
+                    if (SubsystemConfigList.Count > 0)
+                    {
+                        duration = DeploymentDuration / SubsystemConfigList.Count;
+                    }
+
                     // Set the deployment duration for the prediction model
-                    wavesSubConfig._PredictionModelInput.DeploymentDuration = _DeploymentDuration;
+                    wavesSubConfig._PredictionModelInput.DeploymentDuration = duration;
 
                     SubsystemConfigList.Add(wavesSubConfig);
                     this.NotifyOfPropertyChange(() => this.SubsystemConfigList);
@@ -1766,10 +1774,18 @@ namespace RTI
         /// </summary>
         private void UpdateDeploymentDuration()
         {
+            // Divide the days between all the configurations
+            double duration = DeploymentDuration;
+            if (SubsystemConfigList.Count > 0)
+            {
+                duration = DeploymentDuration / SubsystemConfigList.Count;
+            }
+
+
             // Update the VM
             foreach (var vm in SubsystemConfigList)
             {
-                vm._PredictionModelInput.DeploymentDuration = DeploymentDuration;
+                vm._PredictionModelInput.DeploymentDuration = duration;
             }
 
             // Update the prediction model

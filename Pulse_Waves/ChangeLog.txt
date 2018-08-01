@@ -1,5 +1,9 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.6.0
+ * In WavesSubsystemConfigurationViewModel, if CBI is disabled, then make a zero CBI command.
+ * In WavesSetupViewModel, fix deployment duration for multiple configurations.
+
 Pulse_Waves-1.5.2
  * Changed the CepoIndex in the command to a Hex value.
 

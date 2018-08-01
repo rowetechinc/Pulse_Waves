@@ -33,6 +33,8 @@
  * 04/11/2017      RC          1.1.8       Set CWPTBP automatically based off CEI and number of pings.
  * 10/23/2017      RC          1.2.1       Updated the Prediction model on startup.  Fixed bug with not passing BurstInterval to prediction model.
  * 01/12/2018      RC          1.3.2       Add absorption into prediction model.
+ * 08/01/2018      RC          1.6.0       If CBI is disabled, then make a zero CBI command.
+ *                                         
  */
 
 using ReactiveUI;
@@ -1216,13 +1218,19 @@ namespace RTI
             // If CBI is disabled, remove the CBI command
             if(!_CBI_Enabled)
             {
-                for (int x = 0; x < cmds.Count; x++ )
+                for (int x = 0; x < cmds.Count; x++)
                 {
-                    if(cmds[x].Contains(Commands.AdcpSubsystemCommands.CMD_CBI))
+                    if (cmds[x].Contains(Commands.AdcpSubsystemCommands.CMD_CBI))
                     {
+                        // Remove the current CBI command
                         cmds.RemoveAt(x);
+
+                        // Add the blank CBI command
+                        int index = AdcpSubConfig.SubsystemConfig.CepoIndex;
+                        cmds.Add(string.Format("CBI[{0}] 00:00:00.00, 0, 0", index));
                     }
                 }
+
             }
             //// Remove the CWPTBP command
             //else
