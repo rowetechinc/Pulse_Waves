@@ -87,8 +87,8 @@ Section "Core" SecCore
 	File "..\bin\Release\Pulse_Waves.exe"
 	File "..\bin\Release\Pulse_Display.dll"
 	File "..\bin\Release\RTI.dll"
-	File "/oname=x64\SQLite.Interop.dll" "..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\x64\SQLite.Interop.dll"
-	File "/oname=x86\SQLite.Interop.dll" "..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\x86\SQLite.Interop.dll"
+	File "/oname=x64\SQLite.Interop.dll" "..\..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\x64\SQLite.Interop.dll"
+	File "/oname=x86\SQLite.Interop.dll" "..\..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\x86\SQLite.Interop.dll"
 	File "..\bin\Release\Licenses.txt"
 	File "..\bin\Release\EndUserRights.txt"
 	File "..\..\User Guide\RTI - Pulse Waves User Guide.pdf"
@@ -147,7 +147,7 @@ Section ".Net 4.5.1 Full" SecDotNet45Full
     NotDetected:
         DetailPrint "Installing Microsoft .NET Framework 4.5"
         SetDetailsPrint listonly
-		File "..\..\packages\DotNet4.5.1\dotNetFx4-5-1-Full-x86-x64-AllOS-ENU.exe"
+		File "..\..\DotNet4.5.1\dotNetFx4-5-1-Full-x86-x64-AllOS-ENU.exe"
 		ExecWait '"$INSTDIR\Tools\dotNetFx45_Full_setup.exe" /passive /norestart /showfinalerror' $0
 		Goto endDotNet40
 
