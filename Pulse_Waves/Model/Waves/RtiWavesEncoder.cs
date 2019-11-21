@@ -613,7 +613,7 @@ namespace RTI
 
                     #endregion
 
-                    #region Latitude, Longitude and Pressure Sensor Height
+                #region Latitude, Longitude and Pressure Sensor Height
 
 
                     if (ens.IsNmeaAvail && ens.NmeaData.IsGpggaAvail())
@@ -772,13 +772,14 @@ namespace RTI
                         // Store the range tracking values
                         // Average the Range tracking value and set the VertBeamHeight
                         float avgVertHt = 0.0f;
-                        for (int i = 0; i < ens.RangeTrackingData.Range.Length; i++)
-                        {
-                            sample.RangeTracking[i] = ens.RangeTrackingData.Range[i];
-                            avgVertHt += ens.RangeTrackingData.Range[i];
-                        }
-                        // Average height
-                        avgVertHt /= ens.RangeTrackingData.Range.Length;
+                        avgVertHt = ens.RangeTrackingData.GetAverageRange();
+                        //for (int i = 0; i < ens.RangeTrackingData.Range.Length; i++)
+                        //{
+                        //    sample.RangeTracking[i] = ens.RangeTrackingData.Range[i];
+                        //    avgVertHt += ens.RangeTrackingData.Range[i];
+                        //}
+                        //// Average height
+                        //avgVertHt /= ens.RangeTrackingData.Range.Length;
 
                         // Set vertical beam height
                         sample.VertBeamHeight = avgVertHt;
@@ -901,6 +902,7 @@ namespace RTI
 
                 sample.EnsembleNumber = ens.EnsembleData.EnsembleNumber;
                 sample.Pressure = ens.AncillaryData.TransducerDepth + options.PressureOffset;       // Pressure and Pressure offset
+                sample.VertPressure = sample.Pressure;
                 sample.WaterTemp = ens.AncillaryData.WaterTemp;                                     // Water Temp
                 sample.Heading = ens.AncillaryData.Heading;                                         // Heading
                 sample.Pitch = ens.AncillaryData.Pitch;                                             // Pitch
@@ -941,13 +943,14 @@ namespace RTI
                     {
                         // Set vertical beam height
                         sample.RangeTracking[DataSet.Ensemble.BEAM_0_INDEX] = ens.RangeTrackingData.Range[DataSet.Ensemble.BEAM_0_INDEX];
-
+                        sample.VertRangeTracking = ens.RangeTrackingData.Range[DataSet.Ensemble.BEAM_0_INDEX];
                         sample.VertBeamHeight = ens.RangeTrackingData.Range[DataSet.Ensemble.BEAM_0_INDEX];
                     }
                     else
                     {
                         // Set bad value
                         sample.RangeTracking[DataSet.Ensemble.BEAM_0_INDEX] = -1.0f;
+                        sample.VertRangeTracking = -1.0f;
                     }
 
                     // CLEANUP
@@ -969,6 +972,7 @@ namespace RTI
                             if (sample.RangeTracking[DataSet.Ensemble.BEAM_0_INDEX] > 1.2f * sample.Pressure || sample.RangeTracking[DataSet.Ensemble.BEAM_0_INDEX] < 0.8f * sample.Pressure)
                             {
                                 sample.RangeTracking[DataSet.Ensemble.BEAM_0_INDEX] = sample.Pressure;
+                                sample.VertRangeTracking = sample.Pressure;
                                 sample.VertBeamHeight = sample.Pressure;
                             }
                         }
@@ -979,7 +983,7 @@ namespace RTI
                     #endregion
 
                     // Add the latest sample to the record
-                    // When a 4 beam ensemble is decoded
+                    // When a Vertical beam ensemble is decoded
                     WavesRecords.Last().WaveSamples.Add(sample);
 
                 }

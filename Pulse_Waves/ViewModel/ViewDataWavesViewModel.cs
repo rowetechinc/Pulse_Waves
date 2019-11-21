@@ -185,7 +185,12 @@ namespace RTI
         {
             get
             {
-                return _Config.IndexCodeString();
+                if (_Config != null)
+                {
+                    return _Config.IndexCodeString();
+                }
+
+                return "-";
             }
         }
 
@@ -2005,20 +2010,15 @@ namespace RTI
         {
             // Create a series
             var series = new TimeSeries("Pressure", DEFAULT_SELECTEDBIN_0_1);
-
-            // Add the data to the series
-            for (int x = 0; x < record.WaveSamples.Count; x++)
-            {
-                series.Points.Add(new DataPoint(x, record.WaveSamples[x].Pressure));
-            }
-
-            // Create a series
             var hSeries = new TimeSeries("Height", DEFAULT_SELECTEDBIN_1_1);
 
             // Add the data to the series
             for (int x = 0; x < record.WaveSamples.Count; x++)
             {
-                hSeries.Points.Add(new DataPoint(x, record.WaveSamples[x].Height));
+
+                series.Points.Add(new DataPoint(x, record.WaveSamples[x].VertPressure));
+                hSeries.Points.Add(new DataPoint(x, record.WaveSamples[x].VertRangeTracking));
+                //hSeries.Points.Add(new DataPoint(x, record.WaveSamples[x].VertBeamHeight));
             }
 
             // Add a series to the plot

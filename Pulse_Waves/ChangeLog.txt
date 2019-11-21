@@ -1,5 +1,8 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.7.0
+ - In WaveRecord, added VertPressure and VertRangeTracking to seperate from 4 beam values.
+
 Pulse_Waves-1.6.0
  * In WavesSubsystemConfigurationViewModel, if CBI is disabled, then make a zero CBI command.
  * In WavesSetupViewModel, fix deployment duration for multiple configurations.

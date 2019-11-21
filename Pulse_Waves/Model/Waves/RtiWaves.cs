@@ -607,6 +607,50 @@ namespace RTI
                                                     }
                                                     break;
                                                 }
+                                            case "wzp":
+                                                {
+                                                    //// Add the samples if the list isn't created
+                                                    //AddSamples(nrows, 3);
+
+                                                    //// Update the array size if it does not match the number of samples
+                                                    //if (WavesRecordPressure == null || WavesRecordPressure.Length != nrows)
+                                                    //{
+                                                    //    WavesRecordPressure = new float[nrows];
+                                                    //    pSpectrum = new Complex[nrows / 2];
+                                                    //}
+
+                                                    for (int samp = 0; samp < nrows; samp++)
+                                                    {
+                                                        if (MathHelper.ByteArrayToFloat(wBuff, index) > 0)
+                                                        {
+                                                            Record.WaveSamples[samp].VertPressure = MathHelper.ByteArrayToFloat(wBuff, index);
+                                                        }
+                                                        index += 4;
+                                                    }
+                                                    break;
+                                                }
+                                            case "wzr":
+                                                {
+                                                    //// Add the samples if the list isn't created
+                                                    //AddSamples(nrows, 3);
+
+                                                    //// Update the array size if it does not match the number of samples
+                                                    //if (WavesRecordPressure == null || WavesRecordPressure.Length != nrows)
+                                                    //{
+                                                    //    WavesRecordPressure = new float[nrows];
+                                                    //    pSpectrum = new Complex[nrows / 2];
+                                                    //}
+
+                                                    for (int samp = 0; samp < nrows; samp++)
+                                                    {
+                                                        if (MathHelper.ByteArrayToFloat(wBuff, index) > 0)
+                                                        {
+                                                            Record.WaveSamples[samp].VertRangeTracking = MathHelper.ByteArrayToFloat(wBuff, index);
+                                                        }
+                                                        index += 4;
+                                                    }
+                                                    break;
+                                                }
                                             case "wus":
                                                 {
                                                     OK = true;

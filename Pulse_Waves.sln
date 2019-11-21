@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse_Waves", "Pulse_Waves\Pulse_Waves.csproj", "{54C43D45-241A-47DC-9E1C-D8821C59446E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -48,5 +48,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2BE9AD8A-5BD6-4A6C-89DC-1ABC6CEB7E33} = {9F12C79C-E6B5-45E4-B86E-647136957919}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79D5A87B-8528-449F-BAEC-3CAE1BF09761}
 	EndGlobalSection
 EndGlobal

@@ -25,6 +25,7 @@
  * Date            Initials    Version    Comments
  * -----------------------------------------------------------------
  * 02/13/2015      RC          0.0.2      Initial coding
+ * 11/20/2019      RC          1.7.0      Added VertPressure and VertRangeTracking.
  * 
  */
 
@@ -69,6 +70,12 @@ namespace RTI
             /// Pressure in meters.
             /// </summary>
             public float Pressure { get; set; }
+
+            /// <summary>
+            /// WZP 
+            /// Vertical Beam Pressure in meters.
+            /// </summary>
+            public float VertPressure { get; set; }
 
             /// <summary>
             /// WTS
@@ -119,6 +126,13 @@ namespace RTI
             /// [beam]
             /// </summary>
             public float[] RangeTracking { get; set; }
+
+            /// <summary>
+            /// WZR 
+            /// Vertical Beam Range Tracking in meters.
+            /// This is a single vertical beam value for the range compared to the 4 beam value. 
+            /// </summary>
+            public float VertRangeTracking { get; set; }
 
             /// <summary>
             /// Height source which is derived from the
@@ -245,9 +259,19 @@ namespace RTI
             /// <param name="bins">Number of bins.</param>
             public void Init(int beams, int bins)
             {
+                if (beams == 1)
+                {
+                    IsVerticalSample = true;
+                }
+                else
+                {
+                    IsVerticalSample = false;
+                }
+
                 VertBeam = new float[bins];                    // beams
                 VertBeamHeight = 0.0f;
                 Pressure = 0.0f;
+                VertPressure = 0.0f;
                 WaterTemp = 0.0f;
                 Heading = 0.0f;
                 Pitch = 0.0f;
@@ -256,6 +280,7 @@ namespace RTI
                 TimeStampSeconds = 0.0;
                 //SampleTime = 0.0;
                 RangeTracking = new float[beams];               // [beams]
+                VertRangeTracking = 0.0f;
                 Height = 0;
                 NumSamples = 0;
                 EnsembleNumber = 0;
