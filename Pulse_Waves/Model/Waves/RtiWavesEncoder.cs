@@ -771,17 +771,15 @@ namespace RTI
                     {
                         // Store the range tracking values
                         // Average the Range tracking value and set the VertBeamHeight
-                        float avgVertHt = 0.0f;
-                        avgVertHt = ens.RangeTrackingData.GetAverageRange();
-                        //for (int i = 0; i < ens.RangeTrackingData.Range.Length; i++)
-                        //{
-                        //    sample.RangeTracking[i] = ens.RangeTrackingData.Range[i];
-                        //    avgVertHt += ens.RangeTrackingData.Range[i];
-                        //}
-                        //// Average height
-                        //avgVertHt /= ens.RangeTrackingData.Range.Length;
+                        float avgVertHt = ens.RangeTrackingData.GetAverageRange();
 
-                        // Set vertical beam height
+                        // Store the range tracking values
+                        for (int i = 0; i < ens.RangeTrackingData.Range.Length; i++)
+                        {
+                            sample.RangeTracking[i] = ens.RangeTrackingData.Range[i];
+                        }
+
+                        // Set vertical beam height just in case there is no vertical beam height
                         sample.VertBeamHeight = avgVertHt;
                     }
                     else

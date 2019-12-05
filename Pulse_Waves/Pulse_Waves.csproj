@@ -307,7 +307,9 @@
     <Content Include="EndUserRights.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="View\Waves_Selected_Bins.png" />
     <Resource Include="PulseWaves_AppCast.xml" />
+    <Resource Include="Images\Waves_Selected_Bins.png" />
     <Content Include="PulseWaves_releasenotes.html" />
     <Resource Include="pulse_waves_logo.ico" />
     <Resource Include="Styles\Entypo-license.txt" />

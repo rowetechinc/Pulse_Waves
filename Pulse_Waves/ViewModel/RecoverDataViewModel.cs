@@ -171,6 +171,25 @@ namespace RTI
 
         #region Download
 
+        
+        /// <summary>
+        /// Expand the Data Status expander.
+        /// </summary>
+        private bool _IsExpandDownloadStatus;
+        /// <summary>
+        /// Expand the Data Status expander.
+        /// </summary>
+        public bool IsExpandDownloadStatus
+        {
+            get { return _IsExpandDownloadStatus; }
+            set
+            {
+                _IsExpandDownloadStatus = value;
+                this.NotifyOfPropertyChange(() => this.IsExpandDownloadStatus);
+            }
+        }
+
+
         /// <summary>
         /// Period of time to wait for the file to be downloaded before
         /// moving on to the next file.   If the download process hangs,
@@ -722,6 +741,11 @@ namespace RTI
         #region Commands
 
         /// <summary>
+        /// Download and populate the data from the ADCP.
+        /// </summary>
+        public ReactiveCommand<System.Reactive.Unit> DownloadWavesFilesCommand { get; protected set; }
+
+        /// <summary>
         /// Command to download the data async.
         /// </summary>
         public ReactiveCommand<System.Reactive.Unit> DownloadDataCommand { get; protected set; }
@@ -771,6 +795,7 @@ namespace RTI
             DownloadFileList = new BindingList<DownloadFile>();
             _downloadFailList = new List<string>();
             _cancelDownload = false;
+            IsExpandDownloadStatus = false;
 
             IsLoading = false;
             _folderSet = false;
@@ -805,6 +830,9 @@ namespace RTI
 
             // Create a wait handle to wait between each download
             _eventWaitDownload = new EventWaitHandle(false, EventResetMode.AutoReset);
+
+            DownloadWavesFilesCommand = ReactiveCommand.CreateAsyncTask(this.WhenAny(x => x.CanPopulateDownloadList, x => x.Value),
+                                                                _ => Task.Run(() => PopulateAndDownloadData()));
 
             // Create a command to Download the data from the ADCP
             DownloadDataCommand = ReactiveCommand.CreateAsyncTask(this.WhenAny(x => x.CanDownloadData, x => x.Value),
@@ -909,6 +937,30 @@ namespace RTI
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Populate the list.  Then download the data.
+        /// </summary>
+        private void PopulateAndDownloadData()
+        {
+            IsLoading = true;
+            IsExpandDownloadStatus = true;
+
+            // Populate the list for available files to download
+            //PopulateDownloadListCommand.Execute(null);
+            //Task.Run(() => OnPopulateDownloadList());
+            OnPopulateDownloadList();
+
+            // Wait for the populate to complete
+            Thread.Sleep(2000);
+
+            // Download the data.
+            //DownloadDataCommand.Execute(null);
+            //Task.Run(() => DownloadData());
+            DownloadData();
+
+            IsLoading = false;
         }
 
         /// <summary>
