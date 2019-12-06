@@ -43,9 +43,11 @@
                                     <StackPanel>
                                         <TextBlock TextWrapping="Wrap" MaxWidth="500" HorizontalAlignment="Left" Margin="10,5">
                                             <TextBlock.Text>
-                                                Select between 1 and 3 bins to process the waves data.  The more bins the better result.  Bin 0 (first bin) is near the seafloor.
-												You should select the bins near the surface, that will not break through the surface.  These bins will have the strongest orbital velocity
-												to measure.
+                                                Select 3 bins to process the waves data.  Bin 0 (first bin) is near the seafloor.
+												You should select the bins near the surface, but that will not break through the surface.  These bins will have the strongest orbital velocity
+												to measure.  It is difficult to select the bins by default.  Every environment is different so this value will need to be determined by the user.  Also
+												the value can vary based on low and high tide, so select the bins related to low tide.  You can use Pulse to playback some data and determine the best
+												bins to select.
                                             </TextBlock.Text>
                                         </TextBlock>
                                     </StackPanel>
@@ -67,7 +69,7 @@
                         </StackPanel>
 
                         <!--Download Directory-->
-                        <StackPanel>
+                        <StackPanel ToolTip="Select the directory to output the ADCP data downloaded and the MATLAB files for Wavector to select.">
                             <!--Download Directory-->
                             <TextBlock Grid.Column="0" Grid.Row="0" Text="Output Directory:" Margin="5" HorizontalAlignment="Left" Foreground="White" />
                             <TextBox Grid.Column="1" Grid.Row="0" MinWidth="200" Text="{Binding Path=DownloadDirectory}" Margin="5" Foreground="{StaticResource PulseFontColor}" />
@@ -166,7 +168,7 @@
                                     <!--Heading Offset-->
                                     <StackPanel Orientation="Horizontal" ToolTip="Add this value to the heading value.  Then retransform the data.">
                                         <TextBlock Text="Heading Offset: " VerticalAlignment="Center" Foreground="White" Margin="5" />
-                                        <extToolkit:DecimalUpDown Value="{Binding Path=HeadingOFfset}" Margin="5" MinWidth="80" Background="White" />
+                                        <extToolkit:DecimalUpDown Value="{Binding Path=HeadingOffset}" Margin="5" MinWidth="80" Background="White" />
                                     </StackPanel>
 
                                     <!--Pitch Offset-->
@@ -182,12 +184,24 @@
                                     </StackPanel>
 
                                 </StackPanel>
+
+                                <!--Replace Pressure with Vertical Beam-->
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.ToolTip>
+                                        <TextBlock TextWrapping="Wrap" MaxWidth="300">
+                                            In a small wave environment, the pressure sensor will need to be recalibrated for small waves.  Buf if you already collected
+                                            data, you can replace the pressure data with the vertical beam data.  Wavector prioritizes the pressure value for the wave height.
+                                            This will correct the issue with Wavector to see good data.
+                                        </TextBlock>
+                                    </StackPanel.ToolTip>
+                                    <CheckBox Content="Replace Pressure with Vertical Beam" IsChecked="{Binding IsReplacePressure}" Margin="5" />
+                                </StackPanel>
                             </StackPanel>
                         </Expander>
                     </StackPanel>
 
                     <!--Download file or Import File Button-->
-                    <Border Grid.Row="2" Margin="5,35,5,5" ToolTip="Select the files to process.  You can either download the files from the ADCP or select files to import and process.">
+                    <Border Grid.Row="2" Margin="5,15,5,5" Background="{StaticResource PulseBackBorder3Color}" VerticalAlignment="Top" ToolTip="Select the files to process.  You can either download the files from the ADCP or select files to import and process.">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -201,10 +215,10 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,15" Text="Select Files to Process" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" Foreground="{StaticResource PulseFontHighlightColor}" />
 
                             <!--Waves Binary Burst File-->
-                            <Button Grid.Row="1" Grid.Column="0" Command="{Binding DownloadWavesFilesCommand}" Content="Download Files" Margin="10,5" Background="{StaticResource PulseStatusColorGood}" ToolTip="Download the files from the ADCP.  Connect to the ADCP using ther terminal in the top right corner.  Ethernet download will be faster." />
+                            <Button Grid.Row="1" Grid.Column="0" Command="{Binding DownloadWavesFilesCommand}" Content="Download Files" Margin="10,5,10,20" Background="{StaticResource PulseStatusColorGood}" ToolTip="Download the files from the ADCP.  Connect to the ADCP using ther terminal in the top right corner.  Ethernet download will be faster." />
 
                             <!--Waves Binary Burst File-->
-                            <Button Grid.Row="1" Grid.Column="1" Command="{Binding ImportBinaryWavesCommand}" Content="Import Waves Burst Files" Margin="10, 5" Background="{StaticResource PulseStatusColorGood}"  ToolTip="Import raw binary ADCP data [RTB]." />
+                            <Button Grid.Row="1" Grid.Column="1" Command="{Binding ImportBinaryWavesCommand}" Content="Import Waves Burst Files" Margin="10,5,10,20" Background="{StaticResource PulseStatusColorGood}"  ToolTip="Import raw binary ADCP data [RTB]." />
 
                         </Grid>
                     </Border>
@@ -549,28 +563,40 @@
                 <StackPanel>
 					<Image Source="Waves_Selected_Bins.png" Margin="20" />
 
-                    <TextBlock Text="Select Bins: " Margin="5" FontSize="13" FontWeight="Bold" />
+                    <TextBlock Text="Selected Bins: " Margin="5" FontSize="13" FontWeight="Bold" Foreground="{StaticResource PulseFontBrightColor}" />
                     
-                    <TextBlock Margin="30,5,30,30" TextWrapping="Wrap">
+                    <TextBlock Margin="20,0,20,10" TextWrapping="Wrap">
 						<TextBlock.Text>
-							Select between 1 and 3 bins to process the waves data.  The more bins the better result.  Bin 0 (first bin) is near the seafloor.
-							You should select the bins near the surface, that will not break through the surface.  These bins will have the strongest orbital velocity
-							to measure.
+							Select 3 bins to process the waves data.  Bin 0 (first bin) is near the seafloor.
+							You should select the bins near the surface, but that will not break through the surface.  These bins will have the strongest orbital velocity
+							to measure.  It is difficult to select the bins by default.  Every environment is different so this value will need to be determined by the user.  Also
+                            the value can vary based on low and high tide, so select the bins related to low tide.  You can use Pulse to playback some data and determine the best
+                            bins to select.
 						</TextBlock.Text>
                     </TextBlock>
 
-                    <TextBlock Text="Download or Import Files: " Margin="5" FontSize="13" FontWeight="Bold" />
+                    <TextBlock Text="Download or Import Files: " Margin="5" FontSize="13" FontWeight="Bold" Foreground="{StaticResource PulseFontBrightColor}" />
                     
-                    <TextBlock Margin="30,5,30,30" TextWrapping="Wrap">
+                    <TextBlock Margin="20,0,20,10" TextWrapping="Wrap">
                         <TextBlock.Text>
-                            Select all the raw ADCP binary files (RTB) to process.  When data is recorded with the ADCP, typically the files start with a B. 
-                            Ex: B000001.ens.  If you have not downloaded the files from the ADCP, you can download them now.  Ensure the terminal comm port is set i
-                            in the "Terimal" and select the "Download Files" button.  The files will be downloaded
-                            to the "Output Directory".  If you have already downloaded the data, click the "Import Waves Burst Files" and select the burst files.  
-                            The software will then process the waves bursts to generate a MATLAB file.  You can then load these
+                            Select all the raw ADCP binary files (RTB) to process.  When data is recorded with the ADCP, typically the files start with a "B". 
+                            Ex: B000001.ens.  If you have not downloaded the files from the ADCP, you can download them through this interface by clicking "Download Files".  
+                            Ensure the terminal comm port is set in the "Terimal" and select the "Download Files" button.  The files will be downloaded
+                            to the "Output Directory".  If you have already downloaded the data, click the "Import Waves Burst Files" and select the burst files previously downloaded.  
+                            The software will then process the waves bursts to generate MATLAB files.  You can then load these
                             files into Wavector to create a Waves Report by selecting the "Wavector" button above.
                         </TextBlock.Text>
                     </TextBlock>
+
+                    <StackPanel Orientation="Horizontal">
+						<TextBlock Margin="5" TextWrapping="Wrap">
+							If further assitances is needed, please email customer support anytime.
+						</TextBlock>
+                        <TextBlock Margin="5">
+							<Hyperlink NavigateUri="mailto:support@rowetechinc.com">support@rowetechinc.com</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+
                 </StackPanel>
             </Border>
 

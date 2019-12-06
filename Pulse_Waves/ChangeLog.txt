@@ -1,5 +1,10 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.8.0
+ - Added options to replace press with vertical beam.
+ - Added options for heading, pitch and roll offset.
+ - Changed the UI layout for Recover page.
+
 Pulse_Waves-1.7.0
  - In WaveRecord, added VertPressure and VertRangeTracking to seperate from 4 beam values.
 

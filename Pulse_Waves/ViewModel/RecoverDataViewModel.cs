@@ -656,6 +656,74 @@ namespace RTI
             }
         }
 
+        /// <summary>
+        /// Heading Offset.
+        /// </summary>
+        public float HeadingOffset
+        {
+            get { return _options.HeadingOffset; }
+            set
+            {
+                _options.HeadingOffset = value;
+                this.NotifyOfPropertyChange(() => this.HeadingOffset);
+
+                // Save the options
+                SaveOptions();
+            }
+        }
+
+        /// <summary>
+        /// Pitch Offset.
+        /// </summary>
+        public float PitchOffset
+        {
+            get { return _options.PitchOffset; }
+            set
+            {
+                _options.PitchOffset = value;
+                this.NotifyOfPropertyChange(() => this.PitchOffset);
+
+                // Save the options
+                SaveOptions();
+            }
+        }
+
+        /// <summary>
+        /// Roll Offset.
+        /// </summary>
+        public float RollOffset
+        {
+            get { return _options.RollOffset; }
+            set
+            {
+                _options.HeadingOffset = value;
+                this.NotifyOfPropertyChange(() => this.RollOffset);
+
+                // Save the options
+                SaveOptions();
+            }
+        }
+
+        /// <summary>
+        /// Flag to replace the Pressure data with the vertical beam.
+        /// In small waves environment, if the pressure sensor is not
+        /// configured properly, the pressure data will be bad.  This
+        /// will replace the pressure data with the vertical beam data
+        /// so Wavector can still process the data.
+        /// </summary>
+        public bool IsReplacePressure
+        {
+            get { return _options.IsReplacePressure; }
+            set
+            {
+                _options.IsReplacePressure = value;
+                this.NotifyOfPropertyChange(() => this.IsReplacePressure);
+
+                // Save the options
+                SaveOptions();
+            }
+        }
+
         #endregion
 
         #endregion
@@ -809,7 +877,6 @@ namespace RTI
             HeightSourceList.Add(RTI.RecoverDataOptions.HeightSource.Beam2);
             HeightSourceList.Add(RTI.RecoverDataOptions.HeightSource.Beam3);
             HeightSourceList.Add(RTI.RecoverDataOptions.HeightSource.Vertical);
-
 
             BinList = new List<string>();
             BinList.Add(RecoverDataOptions.DISABLE_BIN_SELECTION);
@@ -1518,45 +1585,48 @@ namespace RTI
             // Go to view page
             _eventAggregator.PublishOnUIThread(new ViewNavEvent(ViewNavEvent.ViewId.WavesView));
 
-            //// Publish the records
-            //foreach (var record in _rtiWavesEncoder.WavesRecords)
-            //{
-            //    if (record.WaveSamples.Count > 0)
-            //    {
-            //        _eventAggregator.PublishOnUIThread(new WavesRecordEvent(record));
-            //    }
-            //}
-
             // Publish the filepath to the last record 
             _eventAggregator.PublishOnUIThread(new WavesRecordFileEvent(fileList.ToArray()));
         }
 
-
+        /// <summary>
+        /// Convert the ensemble to waves data.
+        /// 
+        /// Receive the ensemble from the codec.  Then process the informaton to create a waves record.
+        /// </summary>
+        /// <param name="ensembleRaw">Binary ensemble.</param>
+        /// <param name="ensemble">Ensemble object.</param>
         private void AddEnsemble(byte[] ensembleRaw, DataSet.Ensemble ensemble)
         {
             // Create the velocity vectors for the ensemble
             DataSet.VelocityVectorHelper.CreateVelocityVector(ref ensemble);
+
+            // Screen the data
+            // Run Pitch and Roll offset before heading offset
+            if(_options.PitchOffset != 0.0f || _options.RollOffset != 0.0f)
+            {
+                VesselMountOptions vmOptions = new VesselMountOptions();
+                vmOptions.RollOffset = _options.RollOffset;
+                vmOptions.PitchOffset = _options.PitchOffset;
+                RTI.VesselMount.VmTiltOffset.TiltOffset(ref ensemble, vmOptions);
+            }
+
+            // Heading offset
+            if(_options.HeadingOffset != 0.0f)
+            {
+                VesselMountOptions vmOptions = new VesselMountOptions();
+                vmOptions.HeadingOffsetMag = _options.HeadingOffset;
+                RTI.VesselMount.VmHeadingOffset.HeadingOffset(ref ensemble, vmOptions);
+            }
+
+            // Replace Pressure with Vertical Beam range
+            RTI.ScreenData.ReplacePressureVerticalBeam.Replace(ref ensemble);
 
             // Check if the folder needs to be set
             if (!_folderSet)
             {
                 SetFolderPath(ensemble);
             }
-
-            //// Generate the list based off the selections
-            //var selectedBins = new List<int>();
-            //if (Bin1Selection != RecoverDataOptions.DISABLE_BIN_SELECTION)
-            //{
-            //    selectedBins.Add(Convert.ToInt32(Bin1Selection));
-            //}
-            //if (Bin2Selection != RecoverDataOptions.DISABLE_BIN_SELECTION)
-            //{
-            //    selectedBins.Add(Convert.ToInt32(Bin2Selection));
-            //}
-            //if (Bin3Selection != RecoverDataOptions.DISABLE_BIN_SELECTION)
-            //{
-            //    selectedBins.Add(Convert.ToInt32(Bin3Selection));
-            //}
 
             // Send the ensemble to the waves processor
             _rtiWavesEncoder.EncodeWavesMatlab(ensemble, _folderPath, _fileName, _options);
