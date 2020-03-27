@@ -91,6 +91,11 @@ namespace RTI
         /// </summary>
         private bool _downloadComplete;
 
+        /// <summary>
+        /// Burst project.  Created for each recovery.
+        /// </summary>
+        private Project _burstProject;
+
         #region Download
 
         /// <summary>
@@ -864,6 +869,7 @@ namespace RTI
             _downloadFailList = new List<string>();
             _cancelDownload = false;
             IsExpandDownloadStatus = false;
+            _burstProject = null;
 
             IsLoading = false;
             _folderSet = false;
@@ -1540,6 +1546,29 @@ namespace RTI
             // Set flag to set new folder
             _folderSet = false;
 
+            // Pass the raw ensemble files to the Waves Encoder to genreate the waves ensemble files
+            string[] waveFiles = _rtiWavesEncoder.CreateWaveEnsembleFiles(files,
+                                                                              DownloadDirectory,
+                                                                              _options);
+
+            // Import the wave files
+            ImportWaveFiles(waveFiles);
+
+            IsLoading = false;
+        }
+
+        /// <summary>
+        /// Import the files and decode them.
+        /// </summary>
+        /// <param name="files">List of all the files.</param>
+        public async void ImportWaveFiles(string[] files)
+        {
+            // Show progress ring
+            IsLoading = true;
+
+            // Set flag to set new folder
+            _folderSet = false;
+
             // Reset the RTI waves
             _rtiWavesEncoder = new Waves.RtiWavesEncoder();
             this.NotifyOfPropertyChange(() => this.WavesRecover);
@@ -1619,8 +1648,11 @@ namespace RTI
                 RTI.VesselMount.VmHeadingOffset.HeadingOffset(ref ensemble, vmOptions);
             }
 
-            // Replace Pressure with Vertical Beam range
-            RTI.ScreenData.ReplacePressureVerticalBeam.Replace(ref ensemble);
+            if (_options.IsReplacePressure)
+            {
+                // Replace Pressure with Vertical Beam range
+                RTI.ScreenData.ReplacePressureVerticalBeam.Replace(ref ensemble);
+            }
 
             // Check if the folder needs to be set
             if (!_folderSet)

@@ -29,12 +29,14 @@
  * 10/16/2015      RC          0.0.3      Fixed bug with encoding to matlab with the columns not be written correctly.
  * 11/04/2015      RC          1.0.0      Fixed bug if the burst is only a 4beam or vertical, no interleave, then set the correct sample time in WavesCreateMatFile().
  * 11/23/20117     RC          1.2.2      Fixed a bug iterating through the list of MATLAB files and list is changed.
+ * 03/27/2020      RC          3.4.17     Handling new firmware version with BurstID and BurstIndex.
  * 
  */
 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -232,6 +234,46 @@ namespace RTI
 
             #endregion
 
+            #region Project Burst
+
+            /// <summary>
+            /// Project file to hold all incoming burst data to process.
+            /// </summary>
+            Project _burstPrj;
+
+            /// <summary>
+            /// Heading offset for burst processing.
+            /// </summary>
+            float _headingOffset;
+
+
+            /// <summary>
+            /// Pitch offset for burst processing.
+            /// </summary>
+            float _pitchOffset;
+
+            /// <summary>
+            /// Roll offset for burst processing.
+            /// </summary>
+            float _rollOffset;
+
+            /// <summary>
+            /// Flag to replace pressure data with vertical beam range data.
+            /// </summary>
+            bool _isReplacePressure;
+
+            /// <summary>
+            /// Output Directory.
+            /// </summary>
+            string _burstOutputDir;
+
+            /// <summary>
+            /// Burst Options.
+            /// </summary>
+            RecoverDataOptions _burstOptions;
+
+            #endregion
+
             #endregion
 
             #region Properties
@@ -284,6 +326,16 @@ namespace RTI
                 // Create the WavesRecord list and add an initial record
                 WavesRecords = new List<WavesRecord>();
                 WavesRecords.Add(new WavesRecord());
+
+                // Init the burst processing variables
+                _burstPrj = null;
+                _headingOffset = 0.0f;
+                _pitchOffset = 0.0f;
+                _rollOffset = 0.0f;
+                _isReplacePressure = false;
+                _burstOutputDir = "";
+                _burstOptions = new RecoverDataOptions();
+
             }
 
             #region Encode Matlab File
@@ -306,6 +358,146 @@ namespace RTI
                     EncodeWaves();
                 }
             }
+
+            #region Burst Processing File
+
+            /// <summary>
+            /// Pass in the raw ensemble files.  This will break
+            /// up the large raw ensemble files into burst ensemble files.
+            /// Each burst will have a file created.  Those files are then
+            /// passed to the importer to create MATLAB files.
+            /// </summary>
+            /// <param name="files"></param>
+            /// <param name="outputDir"></param>
+            /// <param name="burstOptions"></param>
+            /// <returns>Array of all the files to process.</returns>
+            public string[] CreateWaveEnsembleFiles(string[] files, 
+                                          string outputDir,
+                                          RecoverDataOptions burstOptions)
+            {
+                // Create a project to store all the burst files we are uploading
+                // Set the folder to the create the project
+                // Create a file name for the burst file
+                // Do not set the serial number, it will be set by the project later
+                _burstPrj = new Project("burst", outputDir, "");
+
+                // Set the offset values
+                // If the offset value is 0.0, then the offset will not be used
+                _headingOffset = burstOptions.HeadingOffset;
+                _pitchOffset = burstOptions.PitchOffset;
+                _rollOffset = burstOptions.RollOffset;
+                _isReplacePressure = burstOptions.IsReplacePressure;
+                _burstOptions = burstOptions;
+                _burstOutputDir = outputDir;
+
+                // Add all the files
+                foreach (var filePath in files)
+                {
+                    // Open the file
+                    if (File.Exists(filePath))
+                    {
+                        // Get all the files from the codec
+                        AdcpBinaryCodecReadFile codec = new RTI.AdcpBinaryCodecReadFile();
+                        codec.ProcessDataEvent += Codec_ProcessDataEvent;
+
+                        // Get all the ensembles but process the data through events
+                        codec.GetEnsembles(filePath, false);
+                    }
+                }
+
+                // Check the ensemble firmware version
+                // If the firmware version is greater than 0.2.136
+                DataSet.Ensemble firstEns = _burstPrj.GetFirstEnsemble();
+                if (firstEns != null && firstEns.IsEnsembleAvail)
+                {
+                    if (firstEns.EnsembleData.SysFirmware.FirmwareRevision <= 136 &&
+                        firstEns.EnsembleData.SysFirmware.FirmwareMinor == 2)
+                    {
+                        return files;
+                    }
+                }
+
+
+                // Process the Burst project
+                return ProcessBurstProject(_burstPrj).ToArray();
+
+            }
+
+            /// <summary>
+            /// Process the waves data received from the files.  This is to create a MATLAB file
+            /// to process with Wavector.
+            /// </summary>
+            /// <param name="ensemble">Raw Ensemble data.</param>
+            /// <param name="adcpData">Ensemble object.</param>
+            private void Codec_ProcessDataEvent(byte[] ensemble, DataSet.Ensemble adcpData)
+            {
+                _burstPrj.RecordDbEnsemble(adcpData,
+                                           _headingOffset,
+                                           _pitchOffset,
+                                           _rollOffset,
+                                           _isReplacePressure);
+            }
+
+
+            /// <summary>
+            /// Create burst ensemble files.  For each burst, a
+            /// file will be created.  This will look through the project
+            /// for all the unique burst indexes.  It will then group all the
+            /// ensembles with the same burst index and put them in an ensemble
+            /// file.
+            /// It will then return a list of all the files created.
+            /// </summary>
+            /// <param name="burstProject">Project file to get the burst ensembles.</param>
+            /// <returns>A list of all the files created.</returns>
+            private List<string> ProcessBurstProject(Project burstProject)
+            {
+                // Create a list of files created
+                List<string> wavesFiles = new List<string>();
+
+                // Create a database reader to get the ensembles
+                AdcpDatabaseReader dbReader = new AdcpDatabaseReader();
+
+                // Get all the unique burst Index and burst ID
+                DataTable dtBurstIndex = dbReader.GetBurstIndexList(burstProject);
+
+                // Get all the ensembles for each burst and process
+                for (int x = 0; x < dtBurstIndex.Rows.Count; x++)
+                {
+                    int burstID = Convert.ToInt32(dtBurstIndex.Rows[x]["BurstID"]);
+                    int burstIndex = Convert.ToInt32(dtBurstIndex.Rows[x]["BurstIndex"]);
+
+                    // Create a burst filename
+                    // Burst_ID_000INDEX.m
+                    // string burstFilename = "W_" + burstID.ToString("D03") + burstIndex.ToString("D06") + ".ens";
+                    string burstFilename = "W" + burstIndex.ToString("D07") + ".ens";
+
+                    // Create a file path
+                    string filePath = Path.Combine(_burstOutputDir, burstFilename);
+
+                    // Create a write to write the waves file
+                    BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create, FileAccess.Write));
+
+                    // Store the wave file path
+                    wavesFiles.Add(filePath);
+
+                    // Get all the Ensembles for the burst
+                    DataTable burstEns = dbReader.GetBurstEnsembles(burstProject, burstID, burstIndex);
+
+                    // Add all the ensembles to the encoder
+                    for (int ensIndex = 0; ensIndex < burstEns.Rows.Count; ensIndex++)
+                    {
+                        // Get the ensemble
+                        DataSet.Ensemble ens = dbReader.DataTabletoEnsemble(burstEns.Rows[ensIndex]);
+
+                        // Write the data to a waves file
+                        writer.Write(ens.Encode());
+                    }
+                }
+
+                return wavesFiles;
+            }
+
+            #endregion
 
             /// <summary>
             /// Extract the waves data from the ensemble.
