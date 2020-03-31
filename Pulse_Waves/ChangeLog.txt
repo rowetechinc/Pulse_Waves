@@ -1,5 +1,8 @@
 ﻿Pulse_Waves Changelog
 
+Pulse_Waves-1.9.0
+ - Updated Software to handle BurstID and Interleave count.
+
 Pulse_Waves-1.8.0
  - Added options to replace press with vertical beam.
  - Added options for heading, pitch and roll offset.
