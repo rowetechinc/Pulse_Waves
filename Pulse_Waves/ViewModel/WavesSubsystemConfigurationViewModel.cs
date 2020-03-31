@@ -185,6 +185,7 @@ namespace RTI
                 // Update the display
                 _wavesSetupVM.UpdateCommandSet();
 
+                this.NotifyOfPropertyChange(() => this.CBI_BurstID);
                 this.NotifyOfPropertyChange(() => this.CBI_BurstInterval);
                 this.NotifyOfPropertyChange(() => this.CBI_DescStr);
                 this.NotifyOfPropertyChange(() => this.ShowCbiWarning);
@@ -196,9 +197,9 @@ namespace RTI
         /// CBI Burst Interleaved flag.  If this is set true, then all the burst will occur at the same time.
         /// If this is false, then the first burst will occur the the next burst after the first is completed.
         /// </summary>
-        public bool CBI_Interleaved
+        public int CBI_Interleaved
         {
-            get { return (bool)AdcpSubConfig.Commands.CBI_BurstPairFlag; }
+            get { return AdcpSubConfig.Commands.CBI_BurstPairFlag; }
             set
             {
                 //AdcpSubConfig.Commands.CBI_BurstPairFlag = value;
@@ -235,10 +236,34 @@ namespace RTI
                 // Update the display
                 _wavesSetupVM.UpdateCommandSet();
 
+                this.NotifyOfPropertyChange(() => this.CBI_BurstID);
                 this.NotifyOfPropertyChange(() => this.CBI_NumEnsembles);
                 this.NotifyOfPropertyChange(() => this.CBI_DescStr);
                 this.NotifyOfPropertyChange(() => this.ShowCbiWarning);
                 this.NotifyOfPropertyChange(() => this.CBI_WarningStr);
+            }
+        }
+
+        /// <summary>
+        /// CBI Burst ID.
+        /// Group Subsystems Configurations together.
+        /// </summary>
+        public int CBI_BurstID
+        {
+            get { return AdcpSubConfig.Commands.CBI_BurstID; }
+            set
+            {
+                AdcpSubConfig.Commands.CBI_BurstID = value;
+
+                // Update the display
+                _wavesSetupVM.UpdateCommandSet();
+
+                this.NotifyOfPropertyChange(() => this.CBI_BurstID);
+                this.NotifyOfPropertyChange(() => this.CBI_BurstInterval);
+                this.NotifyOfPropertyChange(() => this.CBI_DescStr);
+                this.NotifyOfPropertyChange(() => this.ShowCbiWarning);
+                this.NotifyOfPropertyChange(() => this.CBI_WarningStr);
+
             }
         }
 
@@ -1122,7 +1147,7 @@ namespace RTI
             {
                 CBI_NumEnsembles = 4096;
                 CBI_BurstInterval = 3600;
-                CBI_Interleaved = false;
+                CBI_Interleaved = 0;
                 CEI = 0.4f;
             }
 
@@ -1137,17 +1162,21 @@ namespace RTI
         /// Update the burst mode interleaved based off other VM selections.
         /// </summary>
         /// <param name="flag">Flag if burst mode or not.</param>
-        public void UpdateBurstModeInterleaved(bool flag)
+        public void UpdateBurstModeInterleaved(int burstCount)
         {
             // Update the configuration
-            AdcpSubConfig.Commands.CBI_BurstPairFlag = flag;
+            AdcpSubConfig.Commands.CBI_BurstPairFlag = burstCount;
 
             // Update the prediction model
-            _PredictionModelInput.CBI_IsInterleaved = flag;
+            _PredictionModelInput.CBI_IsInterleaved = burstCount;
 
             // Update the display
-            _wavesSetupVM.UpdateCommandSet();
-            
+            //_wavesSetupVM.UpdateCommandSet();
+
+            // Update all the burstID
+            _wavesSetupVM.UpdateBurstIDs();
+
+            this.NotifyOfPropertyChange(() => this.CBI_BurstID);
             this.NotifyOfPropertyChange(() => this.CBI_Interleaved);
             this.NotifyOfPropertyChange(() => this.CBI_DescStr);
             this.NotifyOfPropertyChange(() => this.ShowCbiWarning);
@@ -1160,7 +1189,7 @@ namespace RTI
             UpdatePredictionModel();
 
             //Create a warning that indicates which subsystem is interleaved with which
-            if (CBI_Interleaved == true)
+            if (CBI_Interleaved > 0)
             {
                 string nextSubsystemNumber = _wavesSetupVM.setUpBurstInterleavedWarning(this);
                 if (nextSubsystemNumber != null)
@@ -1168,12 +1197,12 @@ namespace RTI
                     CBI_InterleavedMessage = "Subsystem " + Desc.Substring(1, 1) + " is Interleaved with subsystem " + nextSubsystemNumber;
                 }
             }
-            if (CBI_Interleaved == false)
+            if (CBI_Interleaved == 0)
             {
                 CBI_InterleavedMessage = "";
             }
             
-    }
+        }
 
         #endregion
 

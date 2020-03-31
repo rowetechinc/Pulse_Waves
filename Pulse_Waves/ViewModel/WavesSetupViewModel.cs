@@ -1732,7 +1732,7 @@ namespace RTI
         /// VM.
         /// </summary>
         /// <param name="flag">Flag to send.</param>
-        public void UpdateBurstModeInterleaved(bool flag)
+        public void UpdateBurstModeInterleaved(int flag)
         {
             // Update the VM
             // This should be in a pair
@@ -1741,7 +1741,57 @@ namespace RTI
             {
                 vm.UpdateBurstModeInterleaved(flag);
             }
+
+            // Update the burst ID
+            UpdateBurstIDs();
         }
+
+
+        /// <summary>
+        /// Set the BurstID for each subsystem configuration.
+        /// If the burst is interleaved, then set group
+        /// the bursts together wit the BurstID.  
+        /// </summary>
+        public void UpdateBurstIDs()
+        {
+            int index = 1;
+            int interleaveCount = 0;
+
+            foreach (var vm in SubsystemConfigList)
+            {
+                // Track the interleave count
+                if(vm.CBI_Interleaved > 0)
+                {
+                    interleaveCount = vm.CBI_Interleaved;
+                }
+
+                // Set the BurstID
+                vm.CBI_BurstID = index;
+
+                // If the Interleave count is 0
+                // Use a new index value
+                // If the Interleave count is set, use the same BurstID
+                if (interleaveCount <= 0)
+                {
+                    index++;
+                }
+                else
+                {
+                    //// This VM can also not be interleaved, because it
+                    //// is in a interleaved burst, so remove it
+                    //if (interleaveCount != vm.CBI_Interleaved &&                 // Verify this is not the original subsystem config
+                    //    vm.CBI_BurstInterval != 0)                              // Check if the interleave flag is set when it is already in a burst
+                    //{
+                    //    vm.CBI_Interleaved = 0;
+                    //}
+
+                    // Decrement to keep track of all the
+                    // subsystems grouped together already
+                    interleaveCount--;
+                }
+            }
+        }
+
 
         #endregion
 
@@ -1970,8 +2020,8 @@ namespace RTI
 
                 // Set Interleaved for first and second subsystem
                 // Only the first subsystem needs to be turned on
-                SubsystemConfigList[0].CBI_Interleaved = true;
-                SubsystemConfigList[1].CBI_Interleaved = false;
+                SubsystemConfigList[0].CBI_Interleaved = 1;
+                SubsystemConfigList[1].CBI_Interleaved = 0;
 
             }
 

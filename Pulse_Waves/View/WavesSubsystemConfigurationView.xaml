@@ -142,8 +142,8 @@
 
                         <!--CBI Burst Interleaved-->
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Path=CBI_Enabled, Converter={StaticResource BoolToVisConverter}}">
-                            <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Burst Interleaved:               " Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
-                            <CheckBox IsChecked="{Binding CBI_Interleaved}" Margin="5" Style="{StaticResource OnOffSwitchStyle}" HorizontalAlignment="Center" />
+                            <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Burst Interleaved:                  " Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
+                            <extToolkit:IntegerUpDown Value="{Binding CBI_Interleaved}" Margin="5" Minimum="0" Maximum="12" Background="White" />
                             <StackPanel.ToolTip>
                                 <TextBlock Text="{Binding Path=CBI_Desc}" FontFamily="Courier New" />
                             </StackPanel.ToolTip>
@@ -164,6 +164,15 @@
                             <extToolkit:DecimalUpDown Value="{Binding Path=CEI}" Minimum="0" Margin="5" Background="White" />
                             <StackPanel.ToolTip>
                                 <TextBlock Text="{Binding Path=CEI_Desc}" FontFamily="Courier New" />
+                            </StackPanel.ToolTip>
+                        </StackPanel>
+
+                        <!--CWPP-->
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding Path=CBI_Enabled, Converter={StaticResource BoolToVisConverter}}">
+                            <TextBlock Foreground="{StaticResource PulseFontColor}" Text="Burst ID:                                  " Margin="5" VerticalAlignment="Center" FontWeight="Bold" />
+                            <extToolkit:IntegerUpDown Value="{Binding Path=CBI_BurstID}" Minimum="0" Maximum="255" Margin="5" Background="White" />
+                            <StackPanel.ToolTip>
+                                <TextBlock Text="{Binding Path=CBI_Desc}" FontFamily="Courier New" />
                             </StackPanel.ToolTip>
                         </StackPanel>
 
