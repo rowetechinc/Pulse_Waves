@@ -1743,7 +1743,7 @@ namespace RTI
             }
 
             // Update the burst ID
-            UpdateBurstIDs();
+            //UpdateBurstIDs();
         }
 
 
